@@ -4,6 +4,7 @@ var IconIon = require('react-native-vector-icons/Ionicons');
 var Settings = require('./Settings');
 var Camera = require('./Camera');
 var MapView = require('./MapView');
+var AuthorView = require('./AuthorView');
 
 var {
   StyleSheet,
@@ -76,6 +77,7 @@ class SwiperView extends React.Component{
           _goToSettings={this._goToSettings.bind(this)} 
           _goToMap={this._goToMap.bind(this)}/>
         <MapView navigator={this.props.navigator} params={this.state} showsButtons={false} userId={this.props.route.userId}/>
+        <AuthorView navigator={this.props.navigator} params={this.state} showsButtons={false} userId={this.props.route.userId}/>
        </Swiper>
      )
     } else {
