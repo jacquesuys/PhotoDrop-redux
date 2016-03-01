@@ -47,6 +47,12 @@ In your Xcode project, add the 'RCTCustom.m' file in the 'Base' folder in the 'P
 
 ![super agent](http://i.imgur.com/AKDxeVV.png)
 
+## Connect to Server
+
+To connect to the server, run 'mongod' from the root directory. Then, run 'npm start' to start the server on port 8000.
+
+The api is currently hardcoded to the server in the file client/App/Utils/api.js. You may need to change these server references from a deployed server IP to localhost or vice-versa.
+
 ## Run Simulator
 
 In order to run the simulator, navigate to the 'AppDelegate.m' file under the 'ProfoundMongoose' folder. You'll see two options for loading JavaScript code:
