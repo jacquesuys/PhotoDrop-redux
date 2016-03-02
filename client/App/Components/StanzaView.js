@@ -12,7 +12,8 @@ var {
   TouchableOpacity,
   TouchableWithoutFeedback,
   ActionSheetIOS,
-  Text
+  Text,
+  StatusBarIOS,
 } = React;
 
 class StanzaView extends React.Component{
@@ -78,6 +79,7 @@ class StanzaView extends React.Component{
   }
 
   render() {
+    StatusBarIOS.setHidden(true);
     var username = this.state.uploader ? <Text style={styles.infoText}> Uploaded by: {this.state.uploader} </Text> : null;
     var views = this.state.views ? <Text style={styles.infoText}> Views: {this.state.views} </Text> : null;
     var text = this.state.text;
@@ -257,9 +259,11 @@ var styles = StyleSheet.create({
   },
   stanzaText:{
     fontSize: 30,
+    fontFamily: 'circular'
   },
   stanzaContainer:{
     position: 'absolute',
+    padding: 30,
     top: 80
   }
 });
