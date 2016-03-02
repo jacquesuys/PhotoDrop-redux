@@ -47,7 +47,7 @@ class Author extends React.Component {
   }
 
   _saveText(text) {
-    api.saveStaza(this.state.text, this.state.latitude, this.state.longitude, this.props.userId, (res) => 
+    api.saveStanza(this.state.text, this.state.latitude, this.state.longitude, this.props.userId, (res) => 
     {
      console.log('saved some text!!!');
      //EMPTY TEXT OUT???
@@ -56,7 +56,7 @@ class Author extends React.Component {
         // this._closeModal();
       // }, 1300);
     });
-  },
+  }
 
   render() {
     StatusBarIOS.setHidden(true);
@@ -74,7 +74,7 @@ class Author extends React.Component {
           <TouchableOpacity onPress={_.once(this._clearText.bind(this))} style={styles.noButton}>
             <IconIon name="ios-close-empty" size={60} color="#FC9396" style={styles.noIcon} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.yesButton}>
+          <TouchableOpacity onPress={_.once(this._saveText.bind(this))} style={styles.yesButton}>
             <IconIon name="ios-checkmark-empty" size={60} color="#036C69" style={styles.yesIcon} />
           </TouchableOpacity>
         </View>

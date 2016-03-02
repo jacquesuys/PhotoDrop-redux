@@ -1,5 +1,6 @@
 var userController = require('../users/userController.js');
 var photoController = require('../photos/photoController.js');
+var stanzaController = require('../stanzas/stanzaController.js');
 var helpers = require('./helpers.js');
 
 module.exports = function(app, express) {
@@ -14,6 +15,9 @@ module.exports = function(app, express) {
   app.get('/fetchLocations/', photoController.fetchLocations);
   app.get('/fetchUserPhotos/', photoController.fetchUserPhotos);
   app.get('/fetchUserFavorites/', userController.fetchFavorites);
+
+  // Deal with Stanzas
+  app.post('/saveStanza/', stanzaController.saveStanzaModelToDB);
 
   // Increment views count on photo and add to Favorites
   app.get('/incrementViews/', photoController.incrementViews);

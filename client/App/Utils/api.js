@@ -191,7 +191,8 @@ var api = {
   },
 
   saveStanza(data, latitude, longitude, userId, callback) {
-    var url = 'http://localhost:8000/stanzaSave';
+    console.log('about to try to save a stanza');
+    var url = 'http://localhost:8000/saveStanza';
     fetch(url, {
       method: 'POST',
       headers: {
@@ -199,16 +200,15 @@ var api = {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        data: data,
+        text: data,
         latitude: latitude,
         longitude: longitude,
         userId: userId
       })
     }).then(function(res) {
         callback(res._bodyText);
-      }).catch(function(err) { console.log(err); });
     }).catch(function(err) { console.log(err); });
-  },
+  }
 
 };
 

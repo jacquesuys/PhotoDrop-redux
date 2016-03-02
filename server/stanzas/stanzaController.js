@@ -4,8 +4,9 @@ var mongoose = require('mongoose');
 module.exports = {
   // save that stanza as  a model in db
   saveStanzaModelToDB: function(req, res, next) {
+    console.log('server received save stanza req', req.body.text);
     new Stanza({
-      text: req.text,
+      text: req.body.text,
       loc: {
         type: 'Point',
         coordinates: [req.body.longitude, req.body.latitude]
