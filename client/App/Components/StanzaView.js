@@ -85,68 +85,76 @@ class StanzaView extends React.Component{
       if(this.props.showsIndex===false) {
         return (
           <TouchableWithoutFeedback onPress={this._touch.bind(this)} style={styles.imageContainer}>
-            <Text>{this.state.text}</Text>
+            <View style={styles.image}>
+              <Text style={styles.stanzaText}>{this.state.text}</Text>
+            </View>
           </TouchableWithoutFeedback>
         )
       }
       return (
         <TouchableWithoutFeedback onPress={this._touch.bind(this)} style={styles.imageContainer}>
-          <View style={styles.buttonContainer}>
-            <View style={styles.leftContainer}>
-              <TouchableOpacity onPress={this._closeStanza.bind(this)} style={styles.closeButton}>
-                <IconIon name="ios-close-empty" size={45} color="black" style={styles.closeIcon} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.rightContainer}>
-              <TouchableOpacity onPress={this._favoriteStanza.bind(this)} style={styles.favoriteButton}>
-                {this.state.favorited ? <Icon name="heart" size={20} color="black" style={styles.favoriteIcon} /> : <Icon name="heart-o" size={20} color="black" style={styles.favoriteIcon} />}
-              </TouchableOpacity>
-              <TouchableOpacity onPress={this._shareStanza.bind(this)} style={styles.shareButton}>
-                <IconIon name="ios-upload-outline" size={25} color="black" style={styles.shareIcon} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.photoInfoContainer}>
-              {username}
-              {views} 
+          <View style={styles.image} onPress={this._touch.bind(this)}>
+            <Text style={styles.stanzaText}>{this.state.text}</Text>
+            <View style={styles.buttonContainer}>
+              <View style={styles.leftContainer}>
+                <TouchableOpacity onPress={this._closeStanza.bind(this)} style={styles.closeButton}>
+                  <IconIon name="ios-close-empty" size={45} color="white" style={styles.closeIcon} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.rightContainer}>
+                <TouchableOpacity onPress={this._favoriteStanza.bind(this)} style={styles.favoriteButton}>
+                  {this.state.favorited ? <Icon name="heart" size={20} color="white" style={styles.favoriteIcon} /> : <Icon name="heart-o" size={20} color="white" style={styles.favoriteIcon} />}
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this._shareStanza.bind(this)} style={styles.shareButton}>
+                  <IconIon name="ios-upload-outline" size={25} color="white" style={styles.shareIcon} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.photoInfoContainer}>
+                {username}
+                {views} 
+              </View>
             </View>
           </View>
-          <Text onPress={this._touch.bind(this)}>{this.state.text}</Text>
         </TouchableWithoutFeedback>
       )
     } else {
       if(this.state.touched===false) {
         return (
           <TouchableWithoutFeedback onPress={this._touch.bind(this)} style={styles.imageContainer}>
-            <Text>{this.state.text}</Text>
+            <View style={styles.image}>
+              <Text style={styles.stanzaText}>{this.state.text}</Text>
+            </View>
           </TouchableWithoutFeedback>
         )
       }
       return (
         <TouchableWithoutFeedback onPress={this._touch.bind(this)} style={styles.imageContainer}>
-          <View style={styles.buttonContainer}>
-            <View style={styles.leftContainer}>
-              <TouchableOpacity onPress={this._closeStanza.bind(this)} style={styles.closeButton}>
-                <IconIon name="ios-close-empty" size={45} color="black" style={styles.closeIcon} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.rightContainer}>
-              <TouchableOpacity onPress={this._favoriteStanza.bind(this)} style={styles.favoriteButton}>
-                {this.state.favorited ? <Icon name="heart" size={20} color="black" style={styles.favoriteIcon} /> : <Icon name="heart-o" size={20} color="black" style={styles.favoriteIcon} />}
-              </TouchableOpacity>
-              <TouchableOpacity onPress={this._shareStanza.bind(this)} style={styles.shareButton}>
-                <IconIon name="ios-upload-outline" size={25} color="black" style={styles.shareIcon} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.photoInfoContainer}>
-              <Text style={styles.infoText}>
-                Uploaded by: {this.state.uploader}
-              </Text>
-              <Text style={styles.infoText}>
-                Views: {this.state.views}
-              </Text>
+          <View style={styles.image} onPress={this._touch.bind(this)}>
+            <Text style={styles.stanzaText}>{this.state.text}</Text>
+            <View style={styles.buttonContainer}>
+              <View style={styles.leftContainer}>
+                <TouchableOpacity onPress={this._closeStanza.bind(this)} style={styles.closeButton}>
+                  <IconIon name="ios-close-empty" size={45} color="white" style={styles.closeIcon} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.rightContainer}>
+                <TouchableOpacity onPress={this._favoriteStanza.bind(this)} style={styles.favoriteButton}>
+                  {this.state.favorited ? <Icon name="heart" size={20} color="white" style={styles.favoriteIcon} /> : <Icon name="heart-o" size={20} color="white" style={styles.favoriteIcon} />}
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this._shareStanza.bind(this)} style={styles.shareButton}>
+                  <IconIon name="ios-upload-outline" size={25} color="white" style={styles.shareIcon} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.photoInfoContainer}>
+                <Text style={styles.infoText}>
+                  Uploaded by: {this.state.uploader}
+                </Text>
+                <Text style={styles.infoText}>
+                  Views: {this.state.views}
+                </Text>
+              </View>
             </View>
           </View>
-          <Text onPress={this._touch.bind(this)}>{this.state.text}</Text>
         </TouchableWithoutFeedback>
       )
     }
@@ -184,7 +192,7 @@ var styles = StyleSheet.create({
     alignItems:'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: 'black',
+    borderColor: 'white',
     margin: 15,
   },
   shareButton:{
@@ -195,7 +203,7 @@ var styles = StyleSheet.create({
     alignItems:'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: 'black',
+    borderColor: 'white',
     marginRight: 15,
     marginTop: 15
   },
@@ -207,7 +215,7 @@ var styles = StyleSheet.create({
     alignItems:'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: 'black',
+    borderColor: 'white',
     marginTop: 15,
     marginRight: 5,
   },
@@ -237,7 +245,10 @@ var styles = StyleSheet.create({
   infoText:{
     fontSize: 16,
     fontFamily: 'circular',
-    color: 'black'
+    color: 'white'
+  },
+  stanzaText:{
+    fontSize: 30,
   }
 });
 
