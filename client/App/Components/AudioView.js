@@ -8,6 +8,7 @@ var api = require('../Utils/api');
 var BlackPhotoMarker = require('./BlackPhotoMarker');
 var RedPhotoMarker = require('./RedPhotoMarker');
 var IconIon = require('react-native-vector-icons/Ionicons');
+var {AudioRecorder, AudioPlayer} = require('react-native-audio');
 
 var {
   Navigator,
@@ -55,13 +56,17 @@ class Audio extends React.Component {
   }
 
   _startRecording() {
-    console.log('Start recording!');
+    // console.log('Start recording!');
     this.state.recordingNow = true;
+    AudioRecorder.prepareRecordingAtPath('/test.caf');
+
+    AudioRecorder.startRecording();
   }
 
   _finishRecording() {
-    console.log('Finish recording!');
+    // console.log('Finish recording!');
     this.state.recordingNow = false;
+    AudioRecorder.stopRecording();
   }
 
   _toggleRecording() {
@@ -78,7 +83,7 @@ class Audio extends React.Component {
       <View style={{ flex: 1, backgroundColor: '#ededed'}} >
         <Text style={styles.pageTitle}>Audio Extravaganza</Text>
         
-        <TouchableHighlight  onPress={ this._toggleRecording.bind(this) } style={!this.state.recordingNow && styles.recButton, this.state.recordingNow && styles.recordingNow} underlayColor={'#FC9396'}>
+        <TouchableHighlight  onPress={ this._toggleRecording.bind(this) } style={styles.recButton, this.state.recordingNow && styles.recordingNow} underlayColor={'#FC9396'}>
           <Icon name="circle" size={55} color="rgba(237,237,237,0.5)" style={styles.recIcon} />
         </TouchableHighlight>
 
