@@ -8,6 +8,7 @@ var PhotosView = require('./PhotosView');
 var api = require('../Utils/api');
 var BlackPhotoMarker = require('./BlackPhotoMarker');
 var RedPhotoMarker = require('./RedPhotoMarker');
+var BlackStanzaMarker = require('./BlackPhotoMarker');
 var RedStanzaMarker = require('./RedStanzaMarker');
 
 var {
@@ -196,7 +197,7 @@ class Map extends React.Component {
           { this.state.stanzasLocations.map((stanzaLocation) => {
               return (
               <MapView.Marker coordinate={{latitude: stanzaLocation.loc.coordinates[1], longitude: stanzaLocation.loc.coordinates[0]}}>
-                <BlackPhotoMarker navigator={this.props.navigator}/>
+                <BlackStanzaMarker navigator={this.props.navigator}/>
               </MapView.Marker>
              )}
             )

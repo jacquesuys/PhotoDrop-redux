@@ -4,11 +4,10 @@ var Icon = require('react-native-vector-icons/Entypo');
 var {
   StyleSheet,
   View,
-  TouchableOpacity
 } = React;
 
-class RedStanzaMarker extends React.Component {
-  constructor(props) {
+class BlackStanzaMarker extends React.Component{
+  constructor(props){
     super(props);
   }
 
@@ -16,16 +15,16 @@ class RedStanzaMarker extends React.Component {
     return (
         <View style={styles.container}>
           <View style={styles.bubble}>
-            <TouchableOpacity style={styles.icon}>
+            <View style={styles.icon}>
               <Icon name="feather" size={25} color="#ededed"/>
-            </TouchableOpacity>
+            </View>
           </View>
           <View style={styles.arrowBorder} />
           <View style={styles.arrow} />
         </View>
     );
   }
-}
+};
 
 var styles = StyleSheet.create({
   container: {
@@ -36,9 +35,9 @@ var styles = StyleSheet.create({
     flex: 0,
     flexDirection: 'row',
     alignSelf: 'flex-start',
-    backgroundColor: '#FF5A5F',
+    backgroundColor: '#565b5c',
     borderRadius: 30,
-    borderColor: '#D23F44',
+    borderColor: 'grey',
   },
   icon: {
     marginTop: 10,
@@ -50,7 +49,7 @@ var styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 15,
     borderColor: 'transparent',
-    borderTopColor: '#FF5A5F',
+    borderTopColor: '#565b5c',
     alignSelf: 'center',
     marginTop: -14.5
   },
@@ -58,10 +57,10 @@ var styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 4,
     borderColor: 'transparent',
-    borderTopColor: '#D23F44',
+    borderTopColor: 'grey',
     alignSelf: 'center',
     marginTop: -0.5
   }
 });
 
-module.exports = RedStanzaMarker;
+module.exports = BlackStanzaMarker;
