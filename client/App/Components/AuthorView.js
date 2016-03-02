@@ -1,12 +1,6 @@
 var React = require('react-native');
-var MapView = require('react-native-maps');
 var Icon = require('react-native-vector-icons/FontAwesome');
-var CircleMarker = require('./CircleMarker');
-var PhotoView = require('./PhotoView');
-var PhotosView = require('./PhotosView');
 var api = require('../Utils/api');
-var BlackPhotoMarker = require('./BlackPhotoMarker');
-var RedPhotoMarker = require('./RedPhotoMarker');
 var IconIon = require('react-native-vector-icons/Ionicons');
 
 var {
@@ -48,9 +42,20 @@ class Author extends React.Component {
     }, 2000)
   }
 
-  _cancelStanza() {
-    console.log('cancelling!');
-    this.render();
+  _clearText(){
+    this._textInput.setNativeProps({text:''});
+  }
+
+  _saveText(text) {
+    api.saveStanza(this.state.text, this.state.latitude, this.state.longitude, this.props.userId, (res) => 
+    {
+     console.log('saved some text!!!');
+     //EMPTY TEXT OUT???
+      // this.setState({modalVisible: true});
+      // setTimeout(()=> {
+        // this._closeModal();
+      // }, 1300);
+    });
   }
 
   render() {
@@ -59,16 +64,17 @@ class Author extends React.Component {
       <View style={{ flex: 1, backgroundColor: '#ededed'}}>
         <Text style={styles.pageTitle}>Stanza Bonanza</Text>
         <TextInput
+          ref={component => this._textInput = component}
           style={styles.input}
           onChangeText={(text) => this.setState({text})}
           value={this.state.text}
           multiline={true}
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={_.once(this._cancelStanza.bind(this))} style={styles.noButton}>
+          <TouchableOpacity onPress={_.once(this._clearText.bind(this))} style={styles.noButton}>
             <IconIon name="ios-close-empty" size={60} color="#FC9396" style={styles.noIcon} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.yesButton}>
+          <TouchableOpacity onPress={_.once(this._saveText.bind(this))} style={styles.yesButton}>
             <IconIon name="ios-checkmark-empty" size={60} color="#036C69" style={styles.yesIcon} />
           </TouchableOpacity>
         </View>
