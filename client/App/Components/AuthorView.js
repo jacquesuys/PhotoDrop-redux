@@ -1,12 +1,6 @@
 var React = require('react-native');
-var MapView = require('react-native-maps');
 var Icon = require('react-native-vector-icons/FontAwesome');
-var CircleMarker = require('./CircleMarker');
-var PhotoView = require('./PhotoView');
-var PhotosView = require('./PhotosView');
 var api = require('../Utils/api');
-var BlackPhotoMarker = require('./BlackPhotoMarker');
-var RedPhotoMarker = require('./RedPhotoMarker');
 var IconIon = require('react-native-vector-icons/Ionicons');
 
 var {
@@ -51,6 +45,18 @@ class Author extends React.Component {
   _clearText(){
     this._textInput.setNativeProps({text:''});
   }
+
+  _saveText(text) {
+    api.saveStaza(this.state.text, this.state.latitude, this.state.longitude, this.props.userId, (res) => 
+    {
+     console.log('saved some text!!!');
+     //EMPTY TEXT OUT???
+      // this.setState({modalVisible: true});
+      // setTimeout(()=> {
+        // this._closeModal();
+      // }, 1300);
+    });
+  },
 
   render() {
     StatusBarIOS.setHidden(true);

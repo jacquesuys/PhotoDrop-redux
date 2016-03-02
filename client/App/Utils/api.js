@@ -188,7 +188,27 @@ var api = {
     .catch(function(err) {
       console.log(err);
     });
-  }
+  },
+
+  saveStanza(data, latitude, longitude, userId, callback) {
+    var url = 'http://localhost:8000/stanzaSave';
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        data: data,
+        latitude: latitude,
+        longitude: longitude,
+        userId: userId
+      })
+    }).then(function(res) {
+        callback(res._bodyText);
+      }).catch(function(err) { console.log(err); });
+    }).catch(function(err) { console.log(err); });
+  },
 
 };
 
