@@ -48,9 +48,8 @@ class Author extends React.Component {
     }, 2000)
   }
 
-  _cancelStanza() {
-    console.log('cancelling!');
-    this.render();
+  _clearText(){
+    this._textInput.setNativeProps({text:''});
   }
 
   render() {
@@ -59,13 +58,14 @@ class Author extends React.Component {
       <View style={{ flex: 1, backgroundColor: '#ededed'}}>
         <Text style={styles.pageTitle}>Stanza Bonanza</Text>
         <TextInput
+          ref={component => this._textInput = component}
           style={styles.input}
           onChangeText={(text) => this.setState({text})}
           value={this.state.text}
           multiline={true}
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={_.once(this._cancelStanza.bind(this))} style={styles.noButton}>
+          <TouchableOpacity onPress={_.once(this._clearText.bind(this))} style={styles.noButton}>
             <IconIon name="ios-close-empty" size={60} color="#FC9396" style={styles.noIcon} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.yesButton}>
