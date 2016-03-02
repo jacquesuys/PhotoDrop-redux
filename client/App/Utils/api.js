@@ -208,7 +208,67 @@ var api = {
     }).then(function(res) {
         callback(res._bodyText);
     }).catch(function(err) { console.log(err); });
-  }
+  },
+
+  fetchStanzas(latitude, longitude, radius, callback) {
+    var url = 'http://localhost:8000/fetchStanzas?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(stanzas) {
+      callback(stanzas._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
+
+  fetchStanzaLocations(latitude, longitude, latdelta, londelta, callback) {
+    var url = 'http://localhost:8000/fetchStanzaLocations?lat=' + latitude + '&lon=' + longitude + '&latdelta=' + latdelta + '&londelta=' + londelta;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(stanzas) {
+      callback(stanzas._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
+
+  fetchUserStanzas(userId, callback) {
+    var url = 'http://localhost:8000/fetchUserStanzas?userId=' + userId;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(stanzas) {
+      callback(stanzas._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
+
+  incrementStanzaViews(url, callback) {
+    var url = 'http://localhost:8000/incrementStanzaViews?url=' + url;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(result) {
+      callback(result._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
 
 };
 
