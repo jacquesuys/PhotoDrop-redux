@@ -8,6 +8,7 @@
   "dependencies": {
     "lodash": "^4.5.0",
     "react-native": "^0.20.0",
+    "react-native-audio": "^0.6.0",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
     "react-native-keychain": "^0.2.7",
     "react-native-maps": "^0.3.0",
