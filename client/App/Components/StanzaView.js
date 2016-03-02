@@ -86,7 +86,9 @@ class StanzaView extends React.Component{
         return (
           <TouchableWithoutFeedback onPress={this._touch.bind(this)} style={styles.imageContainer}>
             <View style={styles.image}>
-              <Text style={styles.stanzaText}>{this.state.text}</Text>
+              <View style={styles.stanzaContainer}>
+                <Text style={styles.stanzaText}>{this.state.text}</Text>
+              </View>
             </View>
           </TouchableWithoutFeedback>
         )
@@ -94,7 +96,6 @@ class StanzaView extends React.Component{
       return (
         <TouchableWithoutFeedback onPress={this._touch.bind(this)} style={styles.imageContainer}>
           <View style={styles.image} onPress={this._touch.bind(this)}>
-            <Text style={styles.stanzaText}>{this.state.text}</Text>
             <View style={styles.buttonContainer}>
               <View style={styles.leftContainer}>
                 <TouchableOpacity onPress={this._closeStanza.bind(this)} style={styles.closeButton}>
@@ -114,6 +115,9 @@ class StanzaView extends React.Component{
                 {views} 
               </View>
             </View>
+            <View style={styles.stanzaContainer}>
+              <Text style={styles.stanzaText}>{this.state.text}</Text>
+            </View>
           </View>
         </TouchableWithoutFeedback>
       )
@@ -122,7 +126,9 @@ class StanzaView extends React.Component{
         return (
           <TouchableWithoutFeedback onPress={this._touch.bind(this)} style={styles.imageContainer}>
             <View style={styles.image}>
-              <Text style={styles.stanzaText}>{this.state.text}</Text>
+              <View style={styles.stanzaContainer}>
+                <Text style={styles.stanzaText}>{this.state.text}</Text>
+              </View>
             </View>
           </TouchableWithoutFeedback>
         )
@@ -130,7 +136,6 @@ class StanzaView extends React.Component{
       return (
         <TouchableWithoutFeedback onPress={this._touch.bind(this)} style={styles.imageContainer}>
           <View style={styles.image} onPress={this._touch.bind(this)}>
-            <Text style={styles.stanzaText}>{this.state.text}</Text>
             <View style={styles.buttonContainer}>
               <View style={styles.leftContainer}>
                 <TouchableOpacity onPress={this._closeStanza.bind(this)} style={styles.closeButton}>
@@ -153,6 +158,9 @@ class StanzaView extends React.Component{
                   Views: {this.state.views}
                 </Text>
               </View>
+            </View>
+            <View style={styles.stanzaContainer}>
+              <Text style={styles.stanzaText}>{this.state.text}</Text>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -249,6 +257,10 @@ var styles = StyleSheet.create({
   },
   stanzaText:{
     fontSize: 30,
+  },
+  stanzaContainer:{
+    position: 'absolute',
+    top: 80
   }
 });
 
