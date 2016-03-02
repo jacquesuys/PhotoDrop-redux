@@ -7,6 +7,7 @@ var PhotosView = require('./PhotosView');
 var api = require('../Utils/api');
 var BlackPhotoMarker = require('./BlackPhotoMarker');
 var RedPhotoMarker = require('./RedPhotoMarker');
+var IconIon = require('react-native-vector-icons/Ionicons');
 
 var {
   Navigator,
@@ -18,7 +19,7 @@ var {
   TouchableHighlight,
   StatusBarIOS,
   ActivityIndicatorIOS,
-  TextInput
+  TextInput,
 } = React;
 
 class Author extends React.Component {
@@ -47,6 +48,11 @@ class Author extends React.Component {
     }, 2000)
   }
 
+  _cancelStanza() {
+    console.log('cancelling!');
+    this.render();
+  }
+
   render() {
     StatusBarIOS.setHidden(true);
     return (
@@ -58,6 +64,14 @@ class Author extends React.Component {
           value={this.state.text}
           multiline={true}
         />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={_.once(this._cancelStanza.bind(this))} style={styles.noButton}>
+            <IconIon name="ios-close-empty" size={60} color="#FC9396" style={styles.noIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.yesButton}>
+            <IconIon name="ios-checkmark-empty" size={60} color="#036C69" style={styles.yesIcon} />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -89,10 +103,44 @@ var styles = StyleSheet.create({
     margin: 20,
     padding: 20,
   },
-  centering: {
+  buttonContainer: {
     flex: 1,
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  yesButton: {
+    width: 50,
+    height: 50,
+    backgroundColor: 'transparent',
+    borderRadius: 35,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'white',
+    margin: 15,
+  },
+  yesIcon: {
+    width: 60,
+    height: 60,
+    marginLeft: 37
+  },
+  noButton: {
+    width: 50,
+    height: 50,
+    backgroundColor: 'transparent',
+    borderRadius: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'white',
+    margin: 15,
+  },
+  noIcon: {
+    width: 60,
+    height: 60,
+    marginLeft: 37
   },
 });
 
