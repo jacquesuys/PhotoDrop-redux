@@ -17,7 +17,8 @@ var {
   TouchableOpacity,
   TouchableHighlight,
   StatusBarIOS,
-  ActivityIndicatorIOS
+  ActivityIndicatorIOS,
+  TextInput
 } = React;
 
 class Author extends React.Component {
@@ -49,8 +50,14 @@ class Author extends React.Component {
   render() {
     StatusBarIOS.setHidden(true);
     return (
-      <View >
-        <Text>TEXT</Text>
+      <View style={{ flex: 1, backgroundColor: '#ededed'}}>
+        <Text style={styles.pageTitle}>Stanza Bonanza</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => this.setState({text})}
+          value={this.state.text}
+          multiline={true}
+        />
       </View>
     );
   }
@@ -66,17 +73,21 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center'
   },
-  button: {
-    width: 80,
-    paddingHorizontal: 12,
-    alignItems: 'center',
-    marginHorizontal: 10,
-    borderColor: '#FF5A5F'
+  pageTitle: {
+    top: 10,
+    fontSize: 18,
+    fontFamily: 'circular',
+    textAlign: 'center',
+    color: '#565b5c'
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    marginVertical: 30,
-    backgroundColor: 'transparent'
+  input: {
+    height: 300, 
+    borderColor: 'gray', 
+    borderWidth: 5, 
+    borderRadius: 5,
+    fontSize: 30,
+    margin: 20,
+    padding: 20,
   },
   centering: {
     flex: 1,
