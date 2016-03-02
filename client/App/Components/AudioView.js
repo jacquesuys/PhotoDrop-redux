@@ -31,11 +31,36 @@ class Audio extends React.Component {
     this.state = {
       latitude: this.props.latitude,
       longitude: this.props.longitude,
-      recordingNow: false
+
+      recordingNow: false,
+      stoppedRecording: false,
+      stoppedPlaying: false,
+      playing: false,
+      finished: false,
+      currentTime: null,
+      recordingStatusText: null
     };
   }
 
   componentDidMount(){
+
+    AudioRecorder.onProgress = (data) => {
+      console.log('On audio progress-------------------');
+      // TODO: parse into nice timestamp here...
+      var parsedTimeStamp = Math.round(data.currentTime);
+
+      this.state.recordingStatusText = 'Recording...';
+
+      this.setState({currentTime: parsedTimeStamp });
+    };
+    AudioRecorder.onFinished = (data) => {
+      this.state.recordingStatusText = null;
+      this.state.currentTime = null;
+
+      this.setState({finished: data.finished});
+      console.log(`Finished recording: ${data.finished}`)
+    };
+
     setInterval(()=> {
       if(this.props.params.index===1) {
         navigator.geolocation.getCurrentPosition(
@@ -58,7 +83,8 @@ class Audio extends React.Component {
   _startRecording() {
     // console.log('Start recording!');
     this.state.recordingNow = true;
-    AudioRecorder.prepareRecordingAtPath('/test.caf');
+    var fileToSave = '/' + Date.now() + '.caf';
+    AudioRecorder.prepareRecordingAtPath(fileToSave);
 
     AudioRecorder.startRecording();
   }
@@ -67,6 +93,7 @@ class Audio extends React.Component {
     // console.log('Finish recording!');
     this.state.recordingNow = false;
     AudioRecorder.stopRecording();
+
   }
 
   _toggleRecording() {
@@ -83,19 +110,15 @@ class Audio extends React.Component {
       <View style={{ flex: 1, backgroundColor: '#ededed'}} >
         <Text style={styles.pageTitle}>Audio Extravaganza</Text>
         
-        <TouchableHighlight  onPress={ this._toggleRecording.bind(this) } style={styles.recButton, this.state.recordingNow && styles.recordingNow} underlayColor={'#FC9396'}>
-          <Icon name="circle" size={55} color="rgba(237,237,237,0.5)" style={styles.recIcon} />
-        </TouchableHighlight>
-
         <View style={styles.recordBbuttonContainer}>
         
+          <TouchableHighlight  onPress={ this._toggleRecording.bind(this) } style={styles.recButton} underlayColor={'#FC9396'}>
+            <Icon name="circle" size={55} color="rgba(237,237,237,0.5)" style={styles.recIcon} />
+          </TouchableHighlight>
 
-          <TouchableOpacity onPress={_.once(this._cancelStanza.bind(this))} style={styles.noButton}>
-            <IconIon name="ios-close-empty" size={60} color="#FC9396" style={styles.noIcon} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.yesButton}>
-            <IconIon name="ios-checkmark-empty" size={60} color="#036C69" style={styles.yesIcon} />
-          </TouchableOpacity>
+          <Text style={styles.recTime}>{this.state.recordingStatusText}</Text>
+          <Text style={styles.recTime}>{this.state.currentTime}</Text>
+
         </View>
       </View>
     );
@@ -167,7 +190,6 @@ var styles = StyleSheet.create({
     height: 60,
     marginLeft: 37
   },
-
   recordBbuttonContainer: {
     flexDirection: 'row',
     alignItems:'center',
@@ -184,22 +206,13 @@ var styles = StyleSheet.create({
     borderColor: '#ededed',
     paddingLeft: 5
   },
-  recordingNow: {
-    width: 100,
-    height: 100,
-    borderRadius: 100,
-    alignItems: 'center',
-    backgroundColor: 'black',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#ededed',
-    paddingLeft: 5,
-    backgroundColor: 'red'
-  },
   recIcon: {
     width: 52.5,
     height: 55,
     backgroundColor: 'transparent'
+  },
+  recTime: {
+    fontSize: 25
   }
 });
 
