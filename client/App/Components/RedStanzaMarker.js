@@ -38,13 +38,13 @@ var styles = StyleSheet.create({
     alignSelf: 'flex-start',
     backgroundColor: '#FF5A5F',
     borderRadius: 30,
-    borderColor: '#D23F44',
+    borderColor: '#D23F44'
   },
   icon: {
     marginTop: 10,
     marginLeft: 10,
     marginRight: 10,
-    paddingBottom: 5,
+    paddingBottom: 5
   },
   arrow: {
     backgroundColor: 'transparent',

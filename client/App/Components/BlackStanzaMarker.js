@@ -37,13 +37,13 @@ var styles = StyleSheet.create({
     alignSelf: 'flex-start',
     backgroundColor: '#565b5c',
     borderRadius: 30,
-    borderColor: 'grey',
+    borderColor: 'grey'
   },
   icon: {
     marginTop: 10,
     marginLeft: 10,
     marginRight: 10,
-    paddingBottom: 5,
+    paddingBottom: 5
   },
   arrow: {
     backgroundColor: 'transparent',

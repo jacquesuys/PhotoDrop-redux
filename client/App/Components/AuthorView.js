@@ -49,7 +49,7 @@ class Author extends React.Component {
   _saveText(text) {
     api.saveStanza(this.state.text, this.state.latitude, this.state.longitude, this.props.userId, (res) => 
     {
-      this._clearText.bind(this)
+      this._clearText.bind(this);
     });
   }
 
