@@ -18,11 +18,17 @@ module.exports = function(app, express) {
 
   // Deal with Stanzas
   app.post('/saveStanza/', stanzaController.saveStanzaModelToDB);
+  app.get('/fetchStanzas/', stanzaController.fetchStanzas);
+  app.get('/fetchStanzaLocations/', stanzaController.fetchStanzaLocations);
+  app.get('/fetchUserStanzas/', stanzaController.fetchUserStanzas);
 
   // Increment views count on photo and add to Favorites
   app.get('/incrementViews/', photoController.incrementViews);
   app.get('/toggleFavorite/', userController.toggleFavorite);
   app.get('/getPhotoData/', userController.getPhotoData);
+
+  // Increment views count on stanzas
+  app.get('/incrementStanzaViews/', stanzaController.incrementViews);
 
   // Sign in and sign up routes
   app.post('/login', userController.login);

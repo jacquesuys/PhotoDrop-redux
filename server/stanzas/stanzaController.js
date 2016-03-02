@@ -48,7 +48,7 @@ module.exports = {
     });
   },
 
-  fetchLocations: function(req, res, next) {
+  fetchStanzaLocations: function(req, res, next) {
     var lat = Number(req.query.lat);
     var lon = Number(req.query.lon);
     var latdelta = Number(req.query.latdelta);
@@ -113,12 +113,12 @@ module.exports = {
   },
 
   incrementViews: function(req, res, next) {
-    Stanza.findOne({ text: req.query.text }, function(err, stanza) {
+    Stanza.findOne({ text: req.query.url }, function(err, stanza) {
       if (err) {
         next(err);
       }
       if (!stanza) {
-        return next(new Error('Link not added yet'));
+        return next(new Error('Text not added yet'));
       }
       stanza.views++;
       stanza.save(function(err, savedStanza) {

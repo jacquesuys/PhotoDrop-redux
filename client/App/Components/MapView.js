@@ -3,10 +3,13 @@ var MapView = require('react-native-maps');
 var Icon = require('react-native-vector-icons/FontAwesome');
 var CircleMarker = require('./CircleMarker');
 var PhotoView = require('./PhotoView');
+var StanzaView = require('./StanzaView');
 var PhotosView = require('./PhotosView');
 var api = require('../Utils/api');
 var BlackPhotoMarker = require('./BlackPhotoMarker');
 var RedPhotoMarker = require('./RedPhotoMarker');
+var BlackStanzaMarker = require('./BlackPhotoMarker');
+var RedStanzaMarker = require('./RedStanzaMarker');
 
 var {
   Navigator,
@@ -31,7 +34,9 @@ class Map extends React.Component {
       latitudeDelta: 0.003,
       longitudeDelta: (this.props.params.width / this.props.params.height) * 0.003, // division is aspect ratio
       photosLocations: undefined,
-      closeLocations: undefined
+      closeLocations: undefined,
+      stanzasLocations: undefined,
+      closeStanzaLocations: undefined
     };
     
     api.fetchPhotos(this.props.params.latitude, this.props.params.longitude, 50, (photos) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
@@ -42,6 +47,16 @@ class Map extends React.Component {
     api.fetchLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (photos) => {
       var photosArr = JSON.parse(photos);
       this.setState({ photosLocations: photosArr });
+    });
+
+    api.fetchStanzas(this.props.params.latitude, this.props.params.longitude, 50, (stanzas) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+      var stanzasArr = JSON.parse(stanzas);
+      this.setState({ closeStanzaLocations: stanzasArr });
+    });
+
+    api.fetchStanzaLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (stanzas) => {
+      var stanzasArr = JSON.parse(stanzas);
+      this.setState({ stanzasLocations: stanzasArr });
     });
   }
 
@@ -57,6 +72,15 @@ class Map extends React.Component {
             var photosArr = JSON.parse(photos);
             this.setState({ closeLocations: photosArr });
           });
+          api.fetchStanzas(this.props.params.latitude, this.props.params.longitude, 50, (stanzas) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+            var stanzasArr = JSON.parse(stanzas);
+            this.setState({ closeStanzaLocations: stanzasArr });
+          });
+
+          api.fetchStanzaLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (stanzas) => {
+            var stanzasArr = JSON.parse(stanzas);
+            this.setState({ stanzasLocations: stanzasArr });
+          });
         }
       }, 2000)
   }
@@ -67,6 +91,29 @@ class Map extends React.Component {
         this.props.navigator.push({
           component: PhotoView,
           uri: uri,
+          userId: this.props.userId,
+          views: JSON.parse(data).views, 
+          width: this.state.currentScreenWidth,
+          sceneConfig: {
+            ...Navigator.SceneConfigs.FloatFromBottom,
+            gestures: {
+              pop: {
+                ...Navigator.SceneConfigs.FloatFromBottom.gestures.pop,
+                edgeHitWidth: Dimensions.get('window').height,
+              },
+            },
+          }
+        });
+      });
+    }
+  }
+
+  showStanza(text) {
+    return () => {
+      api.incrementStanzaViews(text, (data) => {
+        this.props.navigator.push({
+          component: StanzaView,
+          text: text,
           userId: this.props.userId,
           views: JSON.parse(data).views, 
           width: this.state.currentScreenWidth,
@@ -142,6 +189,23 @@ class Map extends React.Component {
               return (
                <MapView.Marker coordinate={{latitude: photoLocation.loc.coordinates[1], longitude: photoLocation.loc.coordinates[0]}} onPress={this.showImage(photoLocation.url)}>
                  <RedPhotoMarker navigator={this.props.navigator}/>
+               </MapView.Marker>
+             )}
+            )
+          }
+
+          { this.state.stanzasLocations.map((stanzaLocation) => {
+              return (
+              <MapView.Marker coordinate={{latitude: stanzaLocation.loc.coordinates[1], longitude: stanzaLocation.loc.coordinates[0]}}>
+                <BlackStanzaMarker navigator={this.props.navigator}/>
+              </MapView.Marker>
+             )}
+            )
+          }
+          { this.state.closeStanzaLocations.map((stanzaLocation) => {
+              return (
+               <MapView.Marker coordinate={{latitude: stanzaLocation.loc.coordinates[1], longitude: stanzaLocation.loc.coordinates[0]}} onPress={this.showStanza(stanzaLocation.text)}>
+                 <RedStanzaMarker navigator={this.props.navigator}/>
                </MapView.Marker>
              )}
             )
