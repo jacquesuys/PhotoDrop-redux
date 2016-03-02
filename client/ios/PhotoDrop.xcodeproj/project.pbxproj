@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		0093FB9D25024A458C467C24 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC8E29D9675640FAA5BB8073 /* FontAwesome.ttf */; };
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
@@ -30,6 +31,8 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		BF379F5B7E444602AED26E7D /* libRNKeychain.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4FB17611D948DDA9D4CABE /* libRNKeychain.a */; };
 		C96C49B0A56C4368BE611BB2 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 46E7EAD708714B41A0EC4EAD /* Ionicons.ttf */; };
+		D396E59A1C866E09005C1FF8 /* AudioPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D396E5971C866E09005C1FF8 /* AudioPlayerManager.m */; };
+		D396E59B1C866E09005C1FF8 /* AudioRecorderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D396E5991C866E09005C1FF8 /* AudioRecorderManager.m */; };
 		D5A9DD004225420E86582865 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7CFA38A78E4E6E88E6CB4C /* libRNVectorIcons.a */; };
 		DD0FAFE21C7BD5BD00641738 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD0FAFE11C7BD5BD00641738 /* MapKit.framework */; };
 		E6111F614BD3460EB8ABE670 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C62CE342F64E7382A80592 /* libAirMaps.a */; };
@@ -184,6 +187,10 @@
 		919F8AB6A2B54FA9ABD3F5FF /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		C0AE1C4F00E848C7ABFDB7AD /* RNKeychain.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNKeychain.xcodeproj; path = "../node_modules/react-native-keychain/RNKeychain.xcodeproj"; sourceTree = "<group>"; };
 		CC8E29D9675640FAA5BB8073 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		D396E5961C866E09005C1FF8 /* AudioPlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioPlayerManager.h; path = "../node_modules/react-native-audio/ios/AudioPlayerManager.h"; sourceTree = "<group>"; };
+		D396E5971C866E09005C1FF8 /* AudioPlayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioPlayerManager.m; path = "../node_modules/react-native-audio/ios/AudioPlayerManager.m"; sourceTree = "<group>"; };
+		D396E5981C866E09005C1FF8 /* AudioRecorderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioRecorderManager.h; path = "../node_modules/react-native-audio/ios/AudioRecorderManager.h"; sourceTree = "<group>"; };
+		D396E5991C866E09005C1FF8 /* AudioRecorderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioRecorderManager.m; path = "../node_modules/react-native-audio/ios/AudioRecorderManager.m"; sourceTree = "<group>"; };
 		DD0FAFE11C7BD5BD00641738 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		DDA285A0E5F64768B14FE686 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -379,6 +386,10 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D396E5961C866E09005C1FF8 /* AudioPlayerManager.h */,
+				D396E5971C866E09005C1FF8 /* AudioPlayerManager.m */,
+				D396E5981C866E09005C1FF8 /* AudioRecorderManager.h */,
+				D396E5991C866E09005C1FF8 /* AudioRecorderManager.m */,
 				077F23A11C80398A00F87C07 /* lineto-circular-medium.ttf */,
 				DD0FAFE11C7BD5BD00641738 /* MapKit.framework */,
 				13B07FAE1A68108700A75B9A /* ProfoundMongoose */,
@@ -477,7 +488,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 2ZJJNLJ4P3;
+						DevelopmentTeam = 4D8A6V4JX3;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
 								enabled = 1;
@@ -723,8 +734,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D396E59B1C866E09005C1FF8 /* AudioRecorderManager.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				D396E59A1C866E09005C1FF8 /* AudioPlayerManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -821,7 +834,7 @@
 				INFOPLIST_FILE = ProfoundMongoose/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = PhotoDrop;
+				PRODUCT_BUNDLE_IDENTIFIER = PhotoDrop2;
 				PRODUCT_NAME = PhotoDrop;
 				PROVISIONING_PROFILE = "";
 			};
@@ -846,7 +859,7 @@
 				INFOPLIST_FILE = ProfoundMongoose/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = PhotoDrop;
+				PRODUCT_BUNDLE_IDENTIFIER = PhotoDrop2;
 				PRODUCT_NAME = PhotoDrop;
 				PROVISIONING_PROFILE = "";
 			};
