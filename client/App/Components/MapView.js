@@ -3,6 +3,7 @@ var MapView = require('react-native-maps');
 var Icon = require('react-native-vector-icons/FontAwesome');
 var CircleMarker = require('./CircleMarker');
 var PhotoView = require('./PhotoView');
+var StanzaView = require('./StanzaView');
 var PhotosView = require('./PhotosView');
 var api = require('../Utils/api');
 var BlackPhotoMarker = require('./BlackPhotoMarker');
@@ -107,7 +108,7 @@ class Map extends React.Component {
 
   showStanza(text) {
     return () => {
-      api.incrementViews(text, (data) => {
+      api.incrementStanzaViews(text, (data) => {
         this.props.navigator.push({
           component: StanzaView,
           text: text,

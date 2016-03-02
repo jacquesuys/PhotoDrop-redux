@@ -113,7 +113,7 @@ module.exports = {
   },
 
   incrementViews: function(req, res, next) {
-    Stanza.findOne({ text: req.query.text }, function(err, stanza) {
+    Stanza.findOne({ text: req.query.url }, function(err, stanza) {
       if (err) {
         next(err);
       }
