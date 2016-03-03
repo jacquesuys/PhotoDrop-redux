@@ -55,7 +55,6 @@ class Author extends React.Component {
         console.log('text saved');
       }
     });
-    console.log('about to try to clear some SHIIIITTTTT');
     this.setState({text:''});
   }
 
