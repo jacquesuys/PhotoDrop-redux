@@ -55,7 +55,7 @@ class StanzaView extends React.Component{
   _shareStanza() {
     // ActionSheetIOS.showShareActionSheetWithOptions({
     //   text: this.state.text,
-    //   subject: 'Checkout this photo I found From StanzaDrop',
+    //   subject: 'Checkout this post I found From PhotoDrop',
     // },
     // (error) => alert(error),
     // (success, method) => {
