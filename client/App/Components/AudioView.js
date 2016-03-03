@@ -8,11 +8,10 @@ var api = require('../Utils/api');
 var BlackPhotoMarker = require('./BlackPhotoMarker');
 var RedPhotoMarker = require('./RedPhotoMarker');
 var IconIon = require('react-native-vector-icons/Ionicons');
+
 var {AudioRecorder, AudioPlayer} = require('react-native-audio');
 var RNUploader = require('NativeModules').RNUploader;
 var RNFS = require('react-native-fs');
-
-
 
 var {
   Navigator,
@@ -53,22 +52,38 @@ class Audio extends React.Component {
 
   componentDidMount(){
 
-    // get a list of files and directories in the main bundle
-    // console.log('-----------------------------------------------------------------------------');
-    // console.log(RNFS.DocumentDirectoryPath);
-    // RNFS.readDir(RNFS.DocumentDirectoryPath)
-    //   .then((result) => {
-    //     console.log('GOT RESULT================================================', result);
-
-    //     // stat the first file
-    //     // return Promise.all([RNFS.stat(result[0].path), result[0].path]);
-    //   });
+    // // get a list of files and directories in the main bundle 
+    RNFS.readDir(RNFS.DocumentDirectoryPath + '/audio')
+      .then((result) => {
+        console.log('GOT RESULT', result);
+     
+        // stat the first file 
+        // return Promise.all([RNFS.stat(result[0].path), result[0].path]);
+      })
+      // .then((statResult) => {
+      //   if (statResult[0].isFile()) {
+      //     // if we have a file, read it 
+      //     // return RNFS.readFile(statResult[1], 'utf8');
+      //   }
+     
+      //   return 'no file';
+      // })
+      // .then((contents) => {
+      //   // log the file contents 
+      //   console.log(contents);
+      // })
+      // .catch((err) => {
+      //   console.log(err.message, err.code);
+      // });
 
     // upload progress
     DeviceEventEmitter.addListener('RNUploaderProgress', (data)=>{
       let bytesWritten = data.totalBytesWritten;
       let bytesTotal   = data.totalBytesExpectedToWrite;
       let progress     = data.progress;
+
+      console.log('Bytes Total', bytesTotal);
+      console.log('Bytes Written', bytesWritten);
 
       console.log( "upload progress: " + progress + "%");
     });
@@ -104,15 +119,15 @@ class Audio extends React.Component {
   doUpload(){
     console.log('Filename', this.state.currentFileName);
 
-    var audioFilePath = RNFS.DocumentDirectoryPath + '/';
-    // console.log('Audio file path', audioFilePath + '/' + this.state.currentFileName);
+    var audioFilePath = RNFS.DocumentDirectoryPath  + '/' + this.state.currentFileName;
+    console.log('Audio file path------------------------------', audioFilePath);
 
       let files = [
           {
-              name: 'testAudioName.caf',
+              // name: 'testAudioName.caf',
               filename: this.state.currentFileName,
               filepath: audioFilePath  // image from camera roll/assets library
-              // filetype: 'image/png',
+              // filetype: 'image/caf'
           }
       ];
 
@@ -184,12 +199,9 @@ class Audio extends React.Component {
             <Icon name="circle" size={55} color="rgba(237,237,237,0.5)" style={styles.recIcon} />
           </TouchableHighlight>
 
+        </View>
           <Text style={styles.recTime}>{this.state.recordingStatusText}</Text>
           <Text style={styles.recTime}>{this.state.currentTime}</Text>
-
-        </View>
-        <Text style={styles.recTime}>{this.state.recordingStatusText}</Text>
-        <Text style={styles.recTime}>{this.state.currentTime}</Text>
 
         <TouchableOpacity onPress={ this._cancelRecording.bind(this) } style={styles.noButton}>
           <IconIon name="ios-close-empty" size={60} color="#FC9396" style={styles.noIcon} />

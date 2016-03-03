@@ -2,8 +2,22 @@ var userController = require('../users/userController.js');
 var photoController = require('../photos/photoController.js');
 var stanzaController = require('../stanzas/stanzaController.js');
 var audioController = require('../audio/audioController.js');
+
 var multer = require('multer');
-var upload = multer({ dest: __dirname + '/../audio/uploads/' });
+
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, __dirname + '/../audio/uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '.caf');
+  }
+})
+
+var upload = multer({ storage: storage })
+
+// var upload = multer({ dest: __dirname + '/../audio/uploads/' });
 
 
 
