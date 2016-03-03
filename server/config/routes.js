@@ -2,10 +2,9 @@ var userController = require('../users/userController.js');
 var photoController = require('../photos/photoController.js');
 var stanzaController = require('../stanzas/stanzaController.js');
 var audioController = require('../audio/audioController.js');
+var helpers = require('./helpers.js');
 
 var multer = require('multer');
-
-
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, __dirname + '/../audio/uploads/');
@@ -14,17 +13,9 @@ var storage = multer.diskStorage({
     cb(null, Date.now() + '.caf');
   }
 })
-
-var upload = multer({ storage: storage })
-
-// var upload = multer({ dest: __dirname + '/../audio/uploads/' });
-
-
-
-var helpers = require('./helpers.js');
+var upload = multer({ storage: storage });
 
 module.exports = function(app, express) {
-
   // upload photo to imgur and store link in database
   app.post('/imgUpload',
     photoController.uploadPhoto,
@@ -44,7 +35,6 @@ module.exports = function(app, express) {
 
   // Deal with audio
   app.post('/saveAudio', upload.any(), audioController.uploadAudio);
-
 
   // Increment views count on photo and add to Favorites
   app.get('/incrementViews/', photoController.incrementViews);
