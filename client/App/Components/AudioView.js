@@ -10,8 +10,6 @@ var RedPhotoMarker = require('./RedPhotoMarker');
 var IconIon = require('react-native-vector-icons/Ionicons');
 
 var {AudioRecorder, AudioPlayer} = require('react-native-audio');
-// var RNUploader = require('NativeModules').RNUploader;
-// var RNFS = require('react-native-fs');
 
 var {
   Navigator,
@@ -38,6 +36,7 @@ class Audio extends React.Component {
     this.state = {
       latitude: this.props.latitude,
       longitude: this.props.longitude,
+      userId: this.props.userId || this.props.route.userId,
 
       recordingNow: false,
       stoppedRecording: false,
@@ -93,7 +92,9 @@ class Audio extends React.Component {
   }
 
   doUpload(){
-    api.uploadAudio(this.state.currentFileName);
+    api.uploadAudio(this.state.currentFileName, this.state.latitude, this.state.longitude, this.state.userId, function() {
+      console.log('Callback fires!');
+    });
   }
 
   _startRecording() {
