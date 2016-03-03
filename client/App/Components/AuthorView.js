@@ -26,6 +26,7 @@ class Author extends React.Component {
       latitude: this.props.latitude,
       longitude: this.props.longitude,
     };
+    StatusBarIOS.setHidden(false);
   }
 
   componentDidMount(){
@@ -44,19 +45,21 @@ class Author extends React.Component {
   }
 
   _clearText(){
-    // this._textInput.setNativeProps({text:''});
     this.setState({text:''});
   }
 
   _saveText(text) {
     api.saveStanza(this.state.text, this.state.latitude, this.state.longitude, this.props.userId, (res) => 
     {
-      this._clearText.bind(this);
+      if(res) {
+        console.log('text saved');
+      }
     });
+    console.log('about to try to clear some SHIIIITTTTT');
+    this.setState({text:''});
   }
 
   render() {
-    StatusBarIOS.setHidden(true);
     var pageTitle = (
       <Text style={styles.pageTitle}>Stanza Bonanza</Text>
     );
