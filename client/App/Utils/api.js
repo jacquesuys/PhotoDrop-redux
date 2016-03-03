@@ -1,3 +1,8 @@
+var RNUploader = require('NativeModules').RNUploader;
+var RNFS = require('react-native-fs');
+
+
+
 var api = {
   login(username, password) {
     var user = { username: username, password: password };
@@ -302,6 +307,34 @@ var api = {
     });
   },
 
+  uploadAudio(currentFileName) {
+    var audioFilePath = RNFS.DocumentDirectoryPath  + '/' + currentFileName;
+
+      let files = [{
+        filename: currentFileName,
+        filepath: audioFilePath
+      }];
+
+      let opts = {
+      // TODO: Don't forget to change this to a real server!
+        url: 'http://localhost:8000/saveAudio/',
+        files: files,
+        method: 'POST'
+      };
+
+      RNUploader.upload( opts, (err, res) => {
+        if( err ){
+            console.log('Upload Error', err);
+            return;
+        }
+
+        let status = res.status;
+        let responseString = res.data;
+        // let json = JSON.parse( responseString );
+
+        console.log('upload complete with status: ', status, responseString);
+      });
+  }
 };
 
 module.exports = api;

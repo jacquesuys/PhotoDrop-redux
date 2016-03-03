@@ -10,8 +10,8 @@ var RedPhotoMarker = require('./RedPhotoMarker');
 var IconIon = require('react-native-vector-icons/Ionicons');
 
 var {AudioRecorder, AudioPlayer} = require('react-native-audio');
-var RNUploader = require('NativeModules').RNUploader;
-var RNFS = require('react-native-fs');
+// var RNUploader = require('NativeModules').RNUploader;
+// var RNFS = require('react-native-fs');
 
 var {
   Navigator,
@@ -51,30 +51,6 @@ class Audio extends React.Component {
   }
 
   componentDidMount(){
-
-    // // get a list of files and directories in the main bundle 
-    RNFS.readDir(RNFS.DocumentDirectoryPath + '/audio')
-      .then((result) => {
-        console.log('GOT RESULT', result);
-     
-        // stat the first file 
-        // return Promise.all([RNFS.stat(result[0].path), result[0].path]);
-      })
-      // .then((statResult) => {
-      //   if (statResult[0].isFile()) {
-      //     // if we have a file, read it 
-      //     // return RNFS.readFile(statResult[1], 'utf8');
-      //   }
-     
-      //   return 'no file';
-      // })
-      // .then((contents) => {
-      //   // log the file contents 
-      //   console.log(contents);
-      // })
-      // .catch((err) => {
-      //   console.log(err.message, err.code);
-      // });
 
     // upload progress
     DeviceEventEmitter.addListener('RNUploaderProgress', (data)=>{
@@ -117,43 +93,7 @@ class Audio extends React.Component {
   }
 
   doUpload(){
-    console.log('Filename', this.state.currentFileName);
-
-    var audioFilePath = RNFS.DocumentDirectoryPath  + '/' + this.state.currentFileName;
-    console.log('Audio file path------------------------------', audioFilePath);
-
-      let files = [
-          {
-              // name: 'testAudioName.caf',
-              filename: this.state.currentFileName,
-              filepath: audioFilePath  // image from camera roll/assets library
-              // filetype: 'image/caf'
-          }
-      ];
-
-      let opts = {
-        // TODO: Don't forget to change this to a real server!
-          url: 'http://localhost:8000/saveAudio/',
-          files: files,
-          method: 'POST',                             // optional: POST or PUT
-          // headers: { 'Accept': 'application/json' },  // optional
-          // params: { 'user_id': 1 }                    // optional
-      };
-
-      console.log('About to upload');
-
-      RNUploader.upload( opts, (err, res) => {
-          if( err ){
-              console.log('Upload Error', err);
-              return;
-          }
-
-          let status = res.status;
-          let responseString = res.data;
-          // let json = JSON.parse( responseString );
-
-          console.log('upload complete with status: ', status, responseString);
-      });
+    api.uploadAudio(this.state.currentFileName);
   }
 
   _startRecording() {
