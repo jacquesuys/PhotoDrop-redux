@@ -3,6 +3,7 @@ var User = require('./userModel');
 var jwt = require('jsonwebtoken');
 var mongoose = require('mongoose');
 var Photo = require('./../photos/photoModel');
+var Stanza = require('./../stanzas/stanzaModel');
 
 var findUser = Q.nbind(User.findOne, User);
 var createUser = Q.nbind(User.create, User);
@@ -133,7 +134,7 @@ module.exports = {
     User.findOne({ _id: mongoose.mongo.ObjectID(req.query.userId) }, function(err, user) {
       if (err) next(err);
       if (!user) {
-        console.error('User was not found');
+        console.error('User was not found TOGGLEFAV');
       } else {
         if (user.favorites.indexOf(url) === -1) {
           user.favorites.push(url);
@@ -169,12 +170,45 @@ module.exports = {
           }
         });
       }
-    })
+    });
+  },
+
+  getStanzaData: function(req, res, next) {
+    var currentUserId = req.query.userId;
+    Stanza.findOne({ _id: mongoose.mongo.ObjectID(req.query.id) }, function(err, stanza) {
+      if (err) {
+        console.log(err);
+      }
+      if (stanza) {
+        User.findOne({ _id: mongoose.mongo.ObjectID(stanza.userId) }, function(err, user) {
+          if (err) {
+            next(err);
+          }
+          if (!user) {
+            console.error('User was not found --- getStanzaData');
+          } else {
+            User.findOne({ _id: mongoose.mongo.ObjectID(currentUserId) }, function(err, user) {
+              if (err) {
+                next(err);
+              }
+              if (!user) {
+                console.error('User was not found --- getStanzaData 2');
+              } else {
+                var favorited = (user.favorites.indexOf(req.query.id) === -1);
+                res.json({ username: user.username, views: stanza.views, favorited: !favorited });
+              }
+            });
+          }
+        });
+      }
+    });
   },
 
   fetchFavorites: function(req, res, next) {
     User.findOne({ _id: mongoose.mongo.ObjectID(req.query.userId) }, function(err, user) {
-      if (err) next(err);
+      if (err) {
+        next(err);
+      }
       if (!user) {
         console.error('User was not found');
       } else {

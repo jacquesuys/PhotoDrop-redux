@@ -271,6 +271,21 @@ var api = {
     });
   },
 
+  getStanzaData(id, userId, callback) {
+    var url = 'http://localhost:8000/getStanzaData?id=' + id + '&userId=' + userId;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(data) {
+      callback(data._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  }
+
 };
 
 module.exports = api;

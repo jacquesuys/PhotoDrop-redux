@@ -113,7 +113,7 @@ module.exports = {
   },
 
   incrementViews: function(req, res, next) {
-    Stanza.findOne({ _id: req.query.id }, function(err, stanza) {
+    Stanza.findOne({ _id: mongoose.mongo.ObjectID(req.query.id) }, function(err, stanza) {
       if (err) {
         next(err);
       }

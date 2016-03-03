@@ -24,17 +24,18 @@ class StanzaView extends React.Component{
       favorited: false,
       uploader: undefined,
       views: undefined,
+      id: this.props.id || this.props.route.id,
       text: this.props.text || this.props.route.text,
       userId: this.props.userId || this.props.route.userId
     }
-    // api.getStanzaData(this.state.text, this.state.userId, (data) => {
-    //   var data = JSON.parse(data);
-    //   this.setState({
-    //     views: data.views,
-    //     uploader: data.username,
-    //     favorited: data.favorited
-    //   })
-    // })
+    api.getStanzaData(this.state.id, this.state.userId, (data) => {
+      var data = JSON.parse(data);
+      this.setState({
+        views: data.views,
+        uploader: data.username,
+        favorited: data.favorited
+      })
+    })
   }
 
   componentWillUnmount() {
@@ -255,7 +256,7 @@ var styles = StyleSheet.create({
   infoText:{
     fontSize: 16,
     fontFamily: 'circular',
-    color: 'white'
+    color: 'black'
   },
   stanzaText:{
     fontSize: 30,
