@@ -2,6 +2,7 @@ var React = require('react-native');
 var Icon = require('react-native-vector-icons/FontAwesome');
 var api = require('../Utils/api');
 var IconIon = require('react-native-vector-icons/Ionicons');
+var NavigationBar = require('react-native-navbar');
 
 var {
   Navigator,
@@ -25,11 +26,12 @@ class Author extends React.Component {
       latitude: this.props.latitude,
       longitude: this.props.longitude,
     };
+    StatusBarIOS.setHidden(false);
   }
 
   componentDidMount(){
     setInterval(()=> {
-      if(this.props.params.index===1) {
+      if(this.props.params.index===3) {
         navigator.geolocation.getCurrentPosition(
           location => {
             this.setState({
@@ -43,21 +45,29 @@ class Author extends React.Component {
   }
 
   _clearText(){
-    this._textInput.setNativeProps({text:''});
+    this.setState({text:''});
   }
 
   _saveText(text) {
     api.saveStanza(this.state.text, this.state.latitude, this.state.longitude, this.props.userId, (res) => 
     {
-      this._clearText.bind(this);
+      if(res) {
+        console.log('text saved');
+      }
     });
+    this.setState({text:''});
   }
 
   render() {
-    StatusBarIOS.setHidden(true);
+    var pageTitle = (
+      <Text style={styles.pageTitle}>Stanza Bonanza</Text>
+    );
     return (
       <View style={{ flex: 1, backgroundColor: '#ededed'}}>
-        <Text style={styles.pageTitle}>Stanza Bonanza</Text>
+        <NavigationBar 
+          title={pageTitle} 
+          tintColor={"white"}
+        />
         <TextInput
           ref={component => this._textInput = component}
           style={styles.input}
@@ -89,7 +99,6 @@ var styles = StyleSheet.create({
     alignItems: 'center'
   },
   pageTitle: {
-    top: 10,
     fontSize: 18,
     fontFamily: 'circular',
     textAlign: 'center',
@@ -97,18 +106,19 @@ var styles = StyleSheet.create({
   },
   input: {
     height: 300, 
+    fontFamily: 'circular',
     borderColor: 'gray', 
     borderWidth: 5, 
-    borderRadius: 5,
+    borderRadius: 10,
     fontSize: 30,
-    margin: 20,
+    margin: 15,
     padding: 20,
+    backgroundColor: 'white'
   },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'transparent',
-    alignItems: 'flex-end',
     justifyContent: 'center',
   },
   yesButton: {

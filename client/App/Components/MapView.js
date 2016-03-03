@@ -108,11 +108,12 @@ class Map extends React.Component {
     }
   }
 
-  showStanza(text) {
+  showStanza(id, text) {
     return () => {
-      api.incrementStanzaViews(text, (data) => {
+      api.incrementStanzaViews(id, (data) => {
         this.props.navigator.push({
           component: StanzaView,
+          id: id,
           text: text,
           userId: this.props.userId,
           views: JSON.parse(data).views, 
@@ -204,7 +205,7 @@ class Map extends React.Component {
           }
           { this.state.closeStanzaLocations.map((stanzaLocation) => {
               return (
-               <MapView.Marker coordinate={{latitude: stanzaLocation.loc.coordinates[1], longitude: stanzaLocation.loc.coordinates[0]}} onPress={this.showStanza(stanzaLocation.text)}>
+               <MapView.Marker coordinate={{latitude: stanzaLocation.loc.coordinates[1], longitude: stanzaLocation.loc.coordinates[0]}} onPress={this.showStanza(stanzaLocation._id, stanzaLocation.text)}>
                  <RedStanzaMarker navigator={this.props.navigator}/>
                </MapView.Marker>
              )}

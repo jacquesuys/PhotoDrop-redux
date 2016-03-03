@@ -12,7 +12,8 @@ var {
   TouchableOpacity,
   TouchableWithoutFeedback,
   ActionSheetIOS,
-  Text
+  Text,
+  StatusBarIOS,
 } = React;
 
 class StanzaView extends React.Component{
@@ -23,17 +24,18 @@ class StanzaView extends React.Component{
       favorited: false,
       uploader: undefined,
       views: undefined,
+      id: this.props.id || this.props.route.id,
       text: this.props.text || this.props.route.text,
       userId: this.props.userId || this.props.route.userId
     }
-    // api.getStanzaData(this.state.text, this.state.userId, (data) => {
-    //   var data = JSON.parse(data);
-    //   this.setState({
-    //     views: data.views,
-    //     uploader: data.username,
-    //     favorited: data.favorited
-    //   })
-    // })
+    api.getStanzaData(this.state.id, this.state.userId, (data) => {
+      var data = JSON.parse(data);
+      this.setState({
+        views: data.views,
+        uploader: data.username,
+        favorited: data.favorited
+      })
+    })
   }
 
   componentWillUnmount() {
@@ -46,15 +48,15 @@ class StanzaView extends React.Component{
   }
 
   _favoriteStanza() {
-    // api.toggleFavorite(this.state.userId, this.state.text, (result) => {
-    //   this.state.favorited ? this.setState({favorited:false}) : this.setState({favorited:true})
-    // });
+    api.toggleFavorite(this.state.userId, this.state.id, (result) => {
+      this.state.favorited ? this.setState({favorited:false}) : this.setState({favorited:true})
+    });
   }
 
   _shareStanza() {
     // ActionSheetIOS.showShareActionSheetWithOptions({
     //   text: this.state.text,
-    //   subject: 'Checkout this photo I found From StanzaDrop',
+    //   subject: 'Checkout this post I found From PhotoDrop',
     // },
     // (error) => alert(error),
     // (success, method) => {
@@ -78,6 +80,7 @@ class StanzaView extends React.Component{
   }
 
   render() {
+    StatusBarIOS.setHidden(true);
     var username = this.state.uploader ? <Text style={styles.infoText}> Uploaded by: {this.state.uploader} </Text> : null;
     var views = this.state.views ? <Text style={styles.infoText}> Views: {this.state.views} </Text> : null;
     var text = this.state.text;
@@ -253,13 +256,15 @@ var styles = StyleSheet.create({
   infoText:{
     fontSize: 16,
     fontFamily: 'circular',
-    color: 'white'
+    color: 'black'
   },
   stanzaText:{
     fontSize: 30,
+    fontFamily: 'circular'
   },
   stanzaContainer:{
     position: 'absolute',
+    padding: 30,
     top: 80
   }
 });

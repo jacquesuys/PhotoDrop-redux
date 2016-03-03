@@ -255,8 +255,9 @@ var api = {
     });
   },
 
-  incrementStanzaViews(url, callback) {
-    var url = 'http://localhost:8000/incrementStanzaViews?url=' + url;
+  incrementStanzaViews(id, callback) {
+    var url = 'http://localhost:8000/incrementStanzaViews?id=' + id;
+    console.log(" CALLING tHE INCREMENT WITH AN ID ---- ", id);
     return fetch(url, {
       method: 'GET',
       headers: {
@@ -269,6 +270,21 @@ var api = {
       console.log(err);
     });
   },
+
+  getStanzaData(id, userId, callback) {
+    var url = 'http://localhost:8000/getStanzaData?id=' + id + '&userId=' + userId;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(data) {
+      callback(data._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  }
 
 };
 
