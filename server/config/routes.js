@@ -10,7 +10,9 @@ var storage = multer.diskStorage({
     cb(null, __dirname + '/../audio/uploads/');
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '.caf');
+    var userId = req.body.user_id;
+    var fileName = userId + Date.now() + '.caf';
+    cb(null, fileName);
   }
 })
 var upload = multer({ storage: storage });
