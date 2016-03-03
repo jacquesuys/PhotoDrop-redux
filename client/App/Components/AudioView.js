@@ -9,6 +9,10 @@ var BlackPhotoMarker = require('./BlackPhotoMarker');
 var RedPhotoMarker = require('./RedPhotoMarker');
 var IconIon = require('react-native-vector-icons/Ionicons');
 var {AudioRecorder, AudioPlayer} = require('react-native-audio');
+var RNUploader = require('NativeModules').RNUploader;
+var RNFS = require('react-native-fs');
+
+
 
 var {
   Navigator,
@@ -21,6 +25,10 @@ var {
   StatusBarIOS,
   ActivityIndicatorIOS,
   TextInput,
+  Component,
+  DeviceEventEmitter,
+  AlertIOS,
+  AppRegistry
 } = React;
 
 class Audio extends React.Component {
@@ -38,25 +46,43 @@ class Audio extends React.Component {
       playing: false,
       finished: false,
       currentTime: null,
-      recordingStatusText: null
+      recordingStatusText: null,
+      currentFileName: null
     };
   }
 
   componentDidMount(){
 
+    // get a list of files and directories in the main bundle
+    // console.log('-----------------------------------------------------------------------------');
+    // console.log(RNFS.DocumentDirectoryPath);
+    // RNFS.readDir(RNFS.DocumentDirectoryPath)
+    //   .then((result) => {
+    //     console.log('GOT RESULT================================================', result);
+
+    //     // stat the first file
+    //     // return Promise.all([RNFS.stat(result[0].path), result[0].path]);
+    //   });
+
+    // upload progress
+    DeviceEventEmitter.addListener('RNUploaderProgress', (data)=>{
+      let bytesWritten = data.totalBytesWritten;
+      let bytesTotal   = data.totalBytesExpectedToWrite;
+      let progress     = data.progress;
+
+      console.log( "upload progress: " + progress + "%");
+    });
+
     AudioRecorder.onProgress = (data) => {
-      console.log('On audio progress-------------------');
+      console.log('On audio rec progress-------------------');
       // TODO: parse into nice timestamp here...
       var parsedTimeStamp = Math.round(data.currentTime);
-
       this.state.recordingStatusText = 'Recording...';
-
       this.setState({currentTime: parsedTimeStamp });
     };
     AudioRecorder.onFinished = (data) => {
       this.state.recordingStatusText = null;
       this.state.currentTime = null;
-
       this.setState({finished: data.finished});
       console.log(`Finished recording: ${data.finished}`)
     };
@@ -75,17 +101,53 @@ class Audio extends React.Component {
     }, 2000)
   }
 
-  _cancelStanza() {
-    console.log('cancelling!');
-    this.render();
+  doUpload(){
+    console.log('Filename', this.state.currentFileName);
+
+    var audioFilePath = RNFS.DocumentDirectoryPath + '/';
+    // console.log('Audio file path', audioFilePath + '/' + this.state.currentFileName);
+
+      let files = [
+          {
+              name: 'testAudioName.caf',
+              filename: this.state.currentFileName,
+              filepath: audioFilePath  // image from camera roll/assets library
+              // filetype: 'image/png',
+          }
+      ];
+
+      let opts = {
+        // TODO: Don't forget to change this to a real server!
+          url: 'http://localhost:8000/saveAudio/',
+          files: files,
+          method: 'POST',                             // optional: POST or PUT
+          // headers: { 'Accept': 'application/json' },  // optional
+          // params: { 'user_id': 1 }                    // optional
+      };
+
+      console.log('About to upload');
+
+      RNUploader.upload( opts, (err, res) => {
+          if( err ){
+              console.log('Upload Error', err);
+              return;
+          }
+
+          let status = res.status;
+          let responseString = res.data;
+          // let json = JSON.parse( responseString );
+
+          console.log('upload complete with status: ', status, responseString);
+      });
   }
 
   _startRecording() {
     // console.log('Start recording!');
     this.state.recordingNow = true;
-    var fileToSave = '/' + Date.now() + '.caf';
-    AudioRecorder.prepareRecordingAtPath(fileToSave);
+    var fileToSave = Date.now() + '.caf';
+    this.state.currentFileName = fileToSave;
 
+    AudioRecorder.prepareRecordingAtPath('/' + fileToSave);
     AudioRecorder.startRecording();
   }
 
@@ -104,6 +166,12 @@ class Audio extends React.Component {
     }
   }
 
+  _cancelRecording() {
+    console.log('Cancel recording-----------');
+    this.state.currentFileName = null;
+  }
+
+
   render() {
     StatusBarIOS.setHidden(true);
     return (
@@ -120,6 +188,16 @@ class Audio extends React.Component {
           <Text style={styles.recTime}>{this.state.currentTime}</Text>
 
         </View>
+        <Text style={styles.recTime}>{this.state.recordingStatusText}</Text>
+        <Text style={styles.recTime}>{this.state.currentTime}</Text>
+
+        <TouchableOpacity onPress={ this._cancelRecording.bind(this) } style={styles.noButton}>
+          <IconIon name="ios-close-empty" size={60} color="#FC9396" style={styles.noIcon} />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={ this.doUpload.bind(this, ) } style={styles.yesButton}>
+          <IconIon name="ios-checkmark-empty" size={60} color="#036C69" style={styles.yesIcon} />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -193,6 +271,8 @@ var styles = StyleSheet.create({
   recordBbuttonContainer: {
     flexDirection: 'row',
     alignItems:'center',
+    justifyContent: 'center',
+    marginTop: 150,
     marginBottom: 15
   },
   recButton: {

@@ -1,6 +1,12 @@
 var userController = require('../users/userController.js');
 var photoController = require('../photos/photoController.js');
 var stanzaController = require('../stanzas/stanzaController.js');
+var audioController = require('../audio/audioController.js');
+var multer = require('multer');
+var upload = multer({ dest: __dirname + '/../audio/uploads/' });
+
+
+
 var helpers = require('./helpers.js');
 
 module.exports = function(app, express) {
@@ -21,6 +27,10 @@ module.exports = function(app, express) {
   app.get('/fetchStanzas/', stanzaController.fetchStanzas);
   app.get('/fetchStanzaLocations/', stanzaController.fetchStanzaLocations);
   app.get('/fetchUserStanzas/', stanzaController.fetchUserStanzas);
+
+  // Deal with audio
+  app.post('/saveAudio', upload.any(), audioController.uploadAudio);
+
 
   // Increment views count on photo and add to Favorites
   app.get('/incrementViews/', photoController.incrementViews);
