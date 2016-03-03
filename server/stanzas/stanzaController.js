@@ -113,10 +113,11 @@ module.exports = {
   },
 
   incrementViews: function(req, res, next) {
-    Stanza.findOne({ text: req.query.url }, function(err, stanza) {
+    Stanza.findOne({ _id: req.query.id }, function(err, stanza) {
       if (err) {
         next(err);
       }
+      console.log( " HI IM IN THE BAKC END AND THE ID IS!!!!!! --- ", req.query.id);
       if (!stanza) {
         return next(new Error('Text not added yet'));
       }

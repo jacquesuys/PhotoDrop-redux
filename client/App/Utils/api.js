@@ -255,8 +255,9 @@ var api = {
     });
   },
 
-  incrementStanzaViews(url, callback) {
-    var url = 'http://localhost:8000/incrementStanzaViews?url=' + url;
+  incrementStanzaViews(id, callback) {
+    var url = 'http://localhost:8000/incrementStanzaViews?id=' + id;
+    console.log(" CALLING tHE INCREMENT WITH AN ID ---- ", id);
     return fetch(url, {
       method: 'GET',
       headers: {
