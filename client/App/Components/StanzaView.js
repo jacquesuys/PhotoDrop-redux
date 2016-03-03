@@ -48,9 +48,9 @@ class StanzaView extends React.Component{
   }
 
   _favoriteStanza() {
-    // api.toggleFavorite(this.state.userId, this.state.text, (result) => {
-    //   this.state.favorited ? this.setState({favorited:false}) : this.setState({favorited:true})
-    // });
+    api.toggleFavorite(this.state.userId, this.state.id, (result) => {
+      this.state.favorited ? this.setState({favorited:false}) : this.setState({favorited:true})
+    });
   }
 
   _shareStanza() {

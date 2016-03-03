@@ -31,7 +31,7 @@ class Author extends React.Component {
 
   componentDidMount(){
     setInterval(()=> {
-      if(this.props.params.index===1) {
+      if(this.props.params.index===3) {
         navigator.geolocation.getCurrentPosition(
           location => {
             this.setState({

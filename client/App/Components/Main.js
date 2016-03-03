@@ -46,6 +46,9 @@ class SwiperView extends React.Component{
     } else if (state.index === 2) {
       this.setState({ index: 2 });
       StatusBarIOS.setHidden(true);
+    } else if (state.index === 3) {
+      this.setState({ index: 3 });
+      StatusBarIOS.setHidden(true);
     }
   }
 
