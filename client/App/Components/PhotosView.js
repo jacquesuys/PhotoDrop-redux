@@ -191,27 +191,6 @@ class PhotosView extends React.Component{
     })
   }
 
-  //where the fuck is this being used?
-  renderImagesInGroupsOf(count) {
-    return _.chunk(IMAGE_URLS, IMAGES_PER_ROW).map((imagesForRow) => {
-      return (
-        <View style={styles.row}>
-          {this.renderRow(imagesForRow)}
-        </View>
-      )
-    })
-  }
-
-  // renderStanzasInGroupsOf(count) {
-  //   return _.chunk(IMAGE_URLS, IMAGES_PER_ROW).map((imagesForRow) => {
-  //     return (
-  //       <View style={styles.row}>
-  //         {this.renderRow(imagesForRow)}
-  //       </View>
-  //     )
-  //   })
-  // }
-
   _backButton() {
     this.props.navigator.pop();
   }
