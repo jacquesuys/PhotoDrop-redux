@@ -10,6 +10,7 @@ var storage = multer.diskStorage({
     cb(null, __dirname + '/../audio/uploads/');
   },
   filename: function (req, file, cb) {
+    // TODO: change convention of user_id 9
     var userId = req.body.user_id;
     var fileName = userId + Date.now() + '.caf';
     cb(null, fileName);
@@ -36,7 +37,7 @@ module.exports = function(app, express) {
   app.get('/fetchUserStanzas/', stanzaController.fetchUserStanzas);
 
   // Deal with audio
-  app.post('/saveAudio', upload.any(), audioController.uploadAudio);
+  app.post('/saveAudio', upload.any(), audioController.saveAudioToDb);
 
   // Increment views count on photo and add to Favorites
   app.get('/incrementViews/', photoController.incrementViews);

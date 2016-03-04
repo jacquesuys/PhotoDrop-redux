@@ -305,6 +305,7 @@ var api = {
         url: 'http://localhost:8000/saveAudio/',
         files: files,
         method: 'POST',
+        // TODO: maybe fix this to a convention!
         params: { 'user_id': userId }
       };
 
