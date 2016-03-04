@@ -285,7 +285,22 @@ var api = {
     .catch(function(err) {
       console.log(err);
     });
-  }
+  },
+
+  toggleStanzaFavorite(userId, id, callback) {
+    var url = 'http://localhost:8000/toggleStanzaFavorite?userId=' + userId + '&id=' + id;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(result) {
+      callback(result._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
 
 };
 

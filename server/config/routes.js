@@ -29,6 +29,7 @@ module.exports = function(app, express) {
 
   // Increment views count on stanzas
   app.get('/incrementStanzaViews/', stanzaController.incrementViews);
+  app.get('/toggleStanzaFavorite', userController.toggleStanzaFavorite);
   app.get('/getStanzaData/', userController.getStanzaData);
 
   // Sign in and sign up routes
