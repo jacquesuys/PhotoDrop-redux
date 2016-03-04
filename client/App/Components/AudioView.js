@@ -45,7 +45,8 @@ class AudioView extends React.Component {
       finished: false,
       currentTime: null,
       recordingStatusText: null,
-      currentFileName: null
+      currentFileName: null,
+      uploading: false
     };
   }
 
@@ -65,18 +66,23 @@ class AudioView extends React.Component {
 
     AudioRecorder.onProgress = (data) => {
       console.log('On audio rec progress-------------------');
+      this.state.uploading = true;
+
       // TODO: parse into nice timestamp here...
       var parsedTimeStamp = Math.round(data.currentTime);
       this.state.recordingStatusText = 'Recording...';
       this.setState({currentTime: parsedTimeStamp });
     };
     AudioRecorder.onFinished = (data) => {
+      this.state.uploading = false;
+
       this.state.recordingStatusText = null;
       this.state.currentTime = null;
       this.setState({finished: data.finished});
       console.log(`Finished recording: ${data.finished}`)
     };
 
+    // TODO: Figure out what index audio record view uses
     setInterval(()=> {
       if(this.props.params.index===1) {
         navigator.geolocation.getCurrentPosition(
