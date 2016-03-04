@@ -207,7 +207,7 @@ module.exports = {
               if (!user) {
                 console.error('User was not found --- getStanzaData 2');
               } else {
-                var favorited = (user.stanzaFavorites.indexOf(req.query.id) === -1);
+                var favorited = (user.favoriteStanzas.indexOf(req.query.id) === -1);
                 res.json({ username: user.username, views: stanza.views, favorited: !favorited });
               }
             });
@@ -254,10 +254,10 @@ module.exports = {
       if (!user) {
         console.error('User was not found TOGGLE STANZSA FAV');
       } else {
-        if (user.stanzaFavorites.indexOf(id) === -1) {
-          user.stanzaFavorites.push(id);
+        if (user.favoriteStanzas.indexOf(id) === -1) {
+          user.favoriteStanzas.push(id);
         } else {
-          user.stanzaFavorites.splice(user.stanzaFavorites.indexOf(id), 1);
+          user.favoriteStanzas.splice(user.favoriteStanzas.indexOf(id), 1);
         }
         user.save(function(err, savedUser) {
           res.json();

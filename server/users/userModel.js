@@ -19,7 +19,7 @@ var UserSchema = new mongoose.Schema({
     type: Array,
     default: []
   },
-  stanzaFavorites: {
+  favoriteStanzas: {
     type: Array,
     default: []
   },
