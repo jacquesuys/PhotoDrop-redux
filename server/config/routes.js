@@ -38,6 +38,7 @@ module.exports = function(app, express) {
 
   // Deal with audio
   app.post('/saveAudio', upload.any(), audioController.saveAudioToDb);
+  app.get('/incrementAudioViews/', audioController.incrementViews);
 
   // Increment views count on photo and add to Favorites
   app.get('/incrementViews/', photoController.incrementViews);

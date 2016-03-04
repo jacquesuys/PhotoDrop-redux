@@ -1,8 +1,6 @@
 var RNUploader = require('NativeModules').RNUploader;
 var RNFS = require('react-native-fs');
 
-
-
 var api = {
   login(username, password) {
     var user = { username: username, password: password };
@@ -118,7 +116,6 @@ var api = {
       console.log(err);
     });
   },
-
 
   fetchUserPhotos(userId, callback) {
     var url = 'http://localhost:8000/fetchUserPhotos?userId=' + userId;
@@ -341,7 +338,23 @@ var api = {
 
         console.log('upload complete with status: ', status, responseString);
       });
-  }
+  },
+
+  incrementAudioViews(id, callback) {
+    var url = 'http://localhost:8000/incrementAudioViews?id=' + id;
+    console.log(" CALLING tHE INCREMENT WITH AN ID ---- ", id);
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(result) {
+      callback(result._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
 };
 
 module.exports = api;

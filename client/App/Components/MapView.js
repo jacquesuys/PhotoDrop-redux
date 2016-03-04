@@ -36,7 +36,9 @@ class Map extends React.Component {
       photosLocations: undefined,
       closeLocations: undefined,
       stanzasLocations: undefined,
-      closeStanzaLocations: undefined
+      closeStanzaLocations: undefined,
+      audiosLocations: undefined,
+      closeAudiosLocations: undefined
     };
     
     api.fetchPhotos(this.props.params.latitude, this.props.params.longitude, 50, (photos) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
@@ -58,6 +60,16 @@ class Map extends React.Component {
       var stanzasArr = JSON.parse(stanzas);
       this.setState({ stanzasLocations: stanzasArr });
     });
+
+    api.fetchAudios(this.props.params.latitude, this.props.params.longitude, 50, (audios) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+      var audiosArr = JSON.parse(audios);
+      this.setState({ closeAudiosLocations: audiosArr });
+    });
+
+    api.fetchAudioLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (audios) => {
+      var audiosArr = JSON.parse(audios);
+      this.setState({ audiosLocations: audiosArr });
+    });
   }
 
   componentDidMount(){
@@ -76,10 +88,17 @@ class Map extends React.Component {
             var stanzasArr = JSON.parse(stanzas);
             this.setState({ closeStanzaLocations: stanzasArr });
           });
-
           api.fetchStanzaLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (stanzas) => {
             var stanzasArr = JSON.parse(stanzas);
             this.setState({ stanzasLocations: stanzasArr });
+          });
+          api.fetchAudios(this.state.latitude, this.state.longitude, 50, (audios) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+            var audiosArr = JSON.parse(audios);
+            this.setState({ closeAudiosLocations: audiosArr });
+          });
+          api.fetchAudioLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (audios) => {
+            var audiosArr = JSON.parse(audios);
+            this.setState({ audiosLocations: audiosArr });
           });
         }
       }, 2000)
@@ -115,6 +134,30 @@ class Map extends React.Component {
           component: StanzaView,
           id: id,
           text: text,
+          userId: this.props.userId,
+          views: JSON.parse(data).views, 
+          width: this.state.currentScreenWidth,
+          sceneConfig: {
+            ...Navigator.SceneConfigs.FloatFromBottom,
+            gestures: {
+              pop: {
+                ...Navigator.SceneConfigs.FloatFromBottom.gestures.pop,
+                edgeHitWidth: Dimensions.get('window').height,
+              },
+            },
+          }
+        });
+      });
+    }
+  }
+
+  showAudio(id, audio) {
+    return () => {
+      api.incrementAudioViews(id, (data) => {
+        this.props.navigator.push({
+          component: AudioView,
+          id: id,
+          audio: audio,
           userId: this.props.userId,
           views: JSON.parse(data).views, 
           width: this.state.currentScreenWidth,
@@ -207,6 +250,23 @@ class Map extends React.Component {
               return (
                <MapView.Marker coordinate={{latitude: stanzaLocation.loc.coordinates[1], longitude: stanzaLocation.loc.coordinates[0]}} onPress={this.showStanza(stanzaLocation._id, stanzaLocation.text)}>
                  <RedStanzaMarker navigator={this.props.navigator}/>
+               </MapView.Marker>
+             )}
+            )
+          }
+
+          { this.state.audioLocations.map((audioLocation) => {
+              return (
+              <MapView.Marker coordinate={{latitude: audioLocation.loc.coordinates[1], longitude: audioLocation.loc.coordinates[0]}}>
+                <BlackAudioMarker navigator={this.props.navigator}/>
+              </MapView.Marker>
+             )}
+            )
+          }
+          { this.state.closeAudioLocations.map((audioLocation) => {
+              return (
+               <MapView.Marker coordinate={{latitude: audioLocation.loc.coordinates[1], longitude: audioLocation.loc.coordinates[0]}} onPress={this.showAudio(audioLocation._id, audioLocation.text)}>
+                 <RedAudioMarker navigator={this.props.navigator}/>
                </MapView.Marker>
              )}
             )

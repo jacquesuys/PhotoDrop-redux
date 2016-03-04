@@ -21,5 +21,24 @@ module.exports = {
     }).catch(function(err) {
       console.log('could not save to db', err.message);
     });
+  },
+
+  incrementViews: function(req, res, next) {
+    Audios.findOne({ _id: mongoose.mongo.ObjectID(req.query.id) }, function(err, audio) {
+      if (err) {
+        next(err);
+      }
+      console.log( " HI IM IN THE BAKC END AND THE ID IS!!!!!! --- ", req.query.id);
+      if (!audio) {
+        return next(new Error('Text not added yet'));
+      }
+      audio.views++;
+      audio.save(function(err, savedAudio) {
+        if (err) {
+          next(err);
+        }
+        res.json({views: savedAudio.views});
+      });
+    });
   }
 };
