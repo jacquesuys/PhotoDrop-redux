@@ -357,8 +357,8 @@ class PhotosView extends React.Component{
                 title="Refreshing..."
               />
             }>
-            {this.state.stanzas ? this.renderStanzaRow(this.state.stanzas) : null}
             {this.state.imageUrls ? this.renderRow(this.state.imageUrls) : null}
+            {this.state.stanzas ? this.renderStanzaRow(this.state.stanzas) : null}
           </ScrollView>
         </View>
       ); 
