@@ -141,7 +141,7 @@ class PhotosView extends React.Component{
     }
   }
 
-  // showStanzaFullscreen(uri, index) {
+  showStanzaFullscreen(stanza, index) {
   //   return () => {
   //     this.setState({statusBarHidden: true});
   //     this.props.navigator.push({
@@ -163,7 +163,7 @@ class PhotosView extends React.Component{
   //       }
   //     });
   //   }
-  // }
+  }
 
   showStatusBar() {
     this.setState({statusBarHidden: false});
@@ -181,16 +181,17 @@ class PhotosView extends React.Component{
   }
 
   renderStanzaRow(stanzas) {
-    return stanzas.map((id, index) => {
+    return stanzas.map((stanza, index) => {
       return (
         // Hardcoded key value for each element below to dismiss eror message
-        <TouchableHighlight onPress={this.showImageFullscreen(uri, index)}>
-          <Image style={[styles.image, this.calculatedSize()]} source={{uri: uri}} />
+        <TouchableHighlight onPress={this.showStanzaFullscreen(stanza, index)}>
+          <Text style={[styles.image, this.calculatedSize()]}>{stanza.text}</Text>
         </TouchableHighlight>
       )
     })
   }
 
+  //where the fuck is this being used?
   renderImagesInGroupsOf(count) {
     return _.chunk(IMAGE_URLS, IMAGES_PER_ROW).map((imagesForRow) => {
       return (
@@ -200,6 +201,16 @@ class PhotosView extends React.Component{
       )
     })
   }
+
+  // renderStanzasInGroupsOf(count) {
+  //   return _.chunk(IMAGE_URLS, IMAGES_PER_ROW).map((imagesForRow) => {
+  //     return (
+  //       <View style={styles.row}>
+  //         {this.renderRow(imagesForRow)}
+  //       </View>
+  //     )
+  //   })
+  // }
 
   _backButton() {
     this.props.navigator.pop();
@@ -211,8 +222,10 @@ class PhotosView extends React.Component{
     });
     if(event.nativeEvent.selectedSegmentIndex===0) {
         this.setState({ imageUrls: this.state.userPhotosUrls});
+        this.setState({ stanzas: this.state.userStanzas});
     } else if(event.nativeEvent.selectedSegmentIndex===1) {
         this.setState({ imageUrls: this.state.userFavoritesUrls});
+        this.setState({ stanzas: this.state.userFavoriteStanzas});
     }
   }
 
@@ -223,18 +236,27 @@ class PhotosView extends React.Component{
         var photosArr = JSON.parse(photos);
         this.setState({ userFavoritesUrls: photosArr });
       })
+      api.fetchUserFavoriteStanzas(this.state.userId, (stanzas) => {
+        var stanzaArr = JSON.parse(stanzas);
+        this.setState({ userFavoriteStanzas: stanzaArr });
+      })
       api.fetchUserPhotos(this.state.userId, (photos) => {
         var photosArr = JSON.parse(photos);
         var photosUrls = photosArr.map((photo) => {
           return photo.url;
         });
-        // this.setState({ imageUrls: photosUrls });
         this.setState({ userPhotosUrls: photosUrls });
+      })
+      api.fetchUserStanzas(this.state.userId, (stanzas) => {
+        var stanzaArr = JSON.parse(stanzas);
+        this.setState({ userStanzas: stanzaArr });
       })
       if(this.state.selectedIndex===0) {
         this.setState({imageUrls: this.state.userPhotosUrls});
+        this.setState({stanzas: this.state.userStanzas});
       } else if(this.state.selectedIndex===1) {
         this.setState({imageUrls: this.state.userFavoritesUrls});
+        this.setState({stanzas: this.state.userFavoriteStanzas});
       }
     } else {
       navigator.geolocation.getCurrentPosition(
@@ -252,6 +274,10 @@ class PhotosView extends React.Component{
         });
         this.setState({ imageUrls: photosUrls });
       })
+      api.fetchStanzas(this.state.latitude, this.state.longitude, 50, (stanzas) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+        var stanzaArr = JSON.parse(stanzas);
+        this.setState({ stanzas: stanzaArr });
+      })
     }
     setTimeout(() => {
       this.setState({
@@ -263,7 +289,7 @@ class PhotosView extends React.Component{
 
   render() {
     var pageTitle = (
-       this.state.favorites ? <Text style={styles.pageTitle}>Your Photos</Text> : <Text style={styles.pageTitle}>Photos Near You</Text>
+       this.state.favorites ? <Text style={styles.pageTitle}>Your Media</Text> : <Text style={styles.pageTitle}>Media Near You</Text>
     )
     var backButton = (
       <TouchableHighlight onPress={this._backButton.bind(this)} underlayColor={'white'}>
@@ -304,6 +330,7 @@ class PhotosView extends React.Component{
               />
             }>
             {this.state.imageUrls ? this.renderRow(this.state.imageUrls) : null}
+            {this.state.stanzas ? this.renderStanzaRow(this.state.stanzas) : null}
           </ScrollView>
         </View>
       ); 
@@ -330,6 +357,7 @@ class PhotosView extends React.Component{
                 title="Refreshing..."
               />
             }>
+            {this.state.stanzas ? this.renderStanzaRow(this.state.stanzas) : null}
             {this.state.imageUrls ? this.renderRow(this.state.imageUrls) : null}
           </ScrollView>
         </View>
