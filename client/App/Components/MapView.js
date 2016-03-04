@@ -10,6 +10,8 @@ var BlackPhotoMarker = require('./BlackPhotoMarker');
 var RedPhotoMarker = require('./RedPhotoMarker');
 var BlackStanzaMarker = require('./BlackPhotoMarker');
 var RedStanzaMarker = require('./RedStanzaMarker');
+var BlackAudioMarker = require('./BlackAudioMarker');
+var RedAudioMarker = require('./RedAudioMarker');
 
 var {
   Navigator,
