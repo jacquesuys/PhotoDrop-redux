@@ -4,6 +4,7 @@ var _ = require('lodash');
 var api = require('../Utils/api');
 var IconIon = require('react-native-vector-icons/Ionicons');
 var PhotoSwiperView = require('./PhotoSwiperView');
+var StanzaSwiperView = require('./StanzaSwiperView');
 
 var {
   Navigator,
@@ -142,27 +143,27 @@ class PhotosView extends React.Component{
   }
 
   showStanzaFullscreen(stanza, index) {
-  //   return () => {
-  //     this.setState({statusBarHidden: true});
-  //     this.props.navigator.push({
-  //       component: StanzaSwiperView,
-  //       index: index,
-  //       photos: this.state.stanzaIds,
-  //       // uri: uri,
-  //       // width: this.state.currentScreenWidth,
-  //       showStatusBar: this.showStatusBar.bind(this),
-  //       userId: this.state.userId,
-  //       sceneConfig: {
-  //         ...Navigator.SceneConfigs.FloatFromBottom,
-  //         gestures: {
-  //           pop: {
-  //             ...Navigator.SceneConfigs.FloatFromBottom.gestures.pop,
-  //             edgeHitWidth: Dimensions.get('window').height,
-  //           },
-  //         },
-  //       }
-  //     });
-  //   }
+    return () => {
+      this.setState({statusBarHidden: true});
+      this.props.navigator.push({
+        component: StanzaSwiperView,
+        index: index,
+        stanzas: this.state.stanzas,
+        // uri: uri,
+        // width: this.state.currentScreenWidth,
+        showStatusBar: this.showStatusBar.bind(this),
+        userId: this.state.userId,
+        sceneConfig: {
+          ...Navigator.SceneConfigs.FloatFromBottom,
+          gestures: {
+            pop: {
+              ...Navigator.SceneConfigs.FloatFromBottom.gestures.pop,
+              edgeHitWidth: Dimensions.get('window').height,
+            },
+          },
+        }
+      });
+    }
   }
 
   showStatusBar() {
