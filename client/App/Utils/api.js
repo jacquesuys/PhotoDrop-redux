@@ -322,7 +322,11 @@ var api = {
         files: files,
         method: 'POST',
         // TODO: maybe fix this to a convention!
-        params: { 'user_id': userId }
+        params: {
+          'user_id': userId,
+          'latitude': latitude,
+          'longitude': longitude
+        }
       };
 
       RNUploader.upload( opts, (err, res) => {

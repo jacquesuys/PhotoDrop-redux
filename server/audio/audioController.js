@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 module.exports = {
 
   saveAudioToDb: function(req, res) {
-    console.log('Save audio to db', req.body.user_id);
+    console.log('Save audio to db: ------------', typeof parseFloat(req.body.longitude), req.body.latitude);
 
     var thisFile = req.files[0];
 
@@ -12,7 +12,7 @@ module.exports = {
       audio: JSON.stringify( thisFile ),
       loc: {
         type: "Point",
-        coordinates: [req.body.longitude, req.body.latitude]
+        coordinates: [parseFloat(req.body.longitude), parseFloat(req.body.latitude)]
       },
       userId: mongoose.mongo.ObjectID(req.body.user_id)
     }).save().then(function(data){
