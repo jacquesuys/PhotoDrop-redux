@@ -355,6 +355,12 @@ var api = {
       console.log(err);
     });
   },
+  fetchAudios() {
+
+  },
+  fetchAudioLocation() {
+    
+  }
 };
 
 module.exports = api;
