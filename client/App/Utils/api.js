@@ -301,11 +301,11 @@ var api = {
       }];
 
       let opts = {
-        // TODO: Don't forget to change this to a real server!
-          url: 'http://localhost:8000/saveAudio/',
-          files: files,
-          method: 'POST',
-          params: { 'user_id': userId }
+      // TODO: Don't forget to change this to a real server!
+        url: 'http://localhost:8000/saveAudio/',
+        files: files,
+        method: 'POST',
+        params: { 'user_id': userId }
       };
 
       RNUploader.upload( opts, (err, res) => {

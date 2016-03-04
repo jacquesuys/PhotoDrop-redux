@@ -28,7 +28,7 @@ var {
   AppRegistry
 } = React;
 
-class Audio extends React.Component {
+class AudioView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -249,4 +249,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = Audio;
+module.exports = AudioView;
