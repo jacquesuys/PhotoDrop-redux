@@ -5,6 +5,7 @@ var Settings = require('./Settings');
 var Camera = require('./Camera');
 var MapView = require('./MapView');
 var AuthorView = require('./AuthorView');
+var Recorder = require('./Recorder');
 
 var {
   StyleSheet,
@@ -49,6 +50,9 @@ class SwiperView extends React.Component{
     } else if (state.index === 3) {
       this.setState({ index: 3 });
       StatusBarIOS.setHidden(true);
+    } else if (state.index === 4) {
+      this.setState({ index: 4 });
+      StatusBarIOS.setHidden(true);
     }
   }
 
@@ -81,6 +85,12 @@ class SwiperView extends React.Component{
           _goToMap={this._goToMap.bind(this)}/>
         <MapView navigator={this.props.navigator} params={this.state} showsButtons={false} userId={this.props.route.userId}/>
         <AuthorView navigator={this.props.navigator} 
+          latitude={this.state.latitude} 
+          longitude={this.state.longitude} 
+          params={this.state} 
+          showsButtons={false} 
+          userId={this.props.route.userId}/>
+        <Recorder navigator={this.props.navigator} 
           latitude={this.state.latitude} 
           longitude={this.state.longitude} 
           params={this.state} 
