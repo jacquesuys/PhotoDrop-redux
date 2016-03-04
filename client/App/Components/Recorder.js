@@ -84,7 +84,7 @@ class Recorder extends React.Component {
 
     // TODO: Figure out what index audio record view uses
     setInterval(()=> {
-      if(this.props.params.index===1) {
+      if(this.props.params.index === 4) {
         navigator.geolocation.getCurrentPosition(
           location => {
             this.setState({
