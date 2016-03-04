@@ -238,11 +238,31 @@ module.exports = {
       if (!user) {
         console.error('User was not found');
       } else {
-        res.json(user.favoriteStanzas);
+        var counter = 0;
+        var length = user.favoriteStanzas.length;
+        var stanzas = [];
+        var sendResponse = function(stanzas) {
+          res.json(stanzas);
+        };
+        if(length === 0) {
+          res.json();
+        }
+        user.favoriteStanzas.forEach(function(stanzaId) {
+          Stanza.findOne({_id: mongoose.mongo.ObjectID(stanzaId)}, function(err, stanza) {
+            if(err) {
+              next(err);
+            } else {
+              stanzas.push(stanza);
+              counter++;
+              if(counter === length) {
+                sendResponse(stanzas);
+              }
+            }
+          });
+        });
       }
     });
   },
-
 
   toggleStanzaFavorite: function(req, res, next) {
     var id = req.query.id;

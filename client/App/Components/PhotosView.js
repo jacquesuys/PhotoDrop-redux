@@ -40,9 +40,10 @@ class PhotosView extends React.Component{
       userPhotosUrls: undefined,
       userFavoritesUrls: undefined,
       allViewablePhotos: undefined,
-      stanzaIds: undefined,
-      userStanzaIds: undefined,
-      userFavoriteStanzaIds: undefined,
+      stanzas: undefined,
+      userStanzas: undefined,
+      userFavoriteStanzas: undefined,
+      allViewableStanzas: undefined,
       isRefreshing: false,
     };
     if(this.state.favorites) {
@@ -60,15 +61,12 @@ class PhotosView extends React.Component{
       })
       api.fetchUserFavoriteStanzas(this.state.userId, (stanzas) => {
         var stanzasArr = JSON.parse(stanzas);
-        this.setState({ userFavoriteStanzaIds: stanzasArr });
+        this.setState({ userFavoriteStanzas: stanzasArr });
       })
       api.fetchUserStanzas(this.state.userId, (stanzas) => {
         var stanzasArr = JSON.parse(stanzas);
-        var stanzaIds = stanzasArr.map((stanza) => {
-          return stanza.id;
-        });
-        this.setState({ stanzaIds: stanzaIds });
-        this.setState({ userStanzaIds: stanzaIds });
+        this.setState({ stanzas: stanzasArr });
+        this.setState({ userStanzas: stanzasArr });
       })
     } else {
       navigator.geolocation.getCurrentPosition(
@@ -88,10 +86,7 @@ class PhotosView extends React.Component{
       })
       api.fetchStanzas(this.state.latitude, this.state.longitude, 50, (stanzas) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
         var stanzasArr = JSON.parse(stanzas);
-        var stanzaIds = stanzasArr.map((stanza) => {
-          return stanza.id;
-        });
-        this.setState({ stanzaIds: stanzaIds });
+        this.setState({ stanzas: stanzasArr });
       })
     }
   }
@@ -99,8 +94,10 @@ class PhotosView extends React.Component{
   componentDidMount() {
     if(this.state.favorites){
       this.setState({ imageUrls: this.state.userPhotosUrls});
+      this.setState({ stanzas: this.state.userStanzas});
     } else {
       this.setState({ imageUrls: this.state.allViewablePhotos});
+      this.setState({ stanzas: this.state.allViewableStanzas});
     }
   }
 
@@ -144,12 +141,47 @@ class PhotosView extends React.Component{
     }
   }
 
+  // showStanzaFullscreen(uri, index) {
+  //   return () => {
+  //     this.setState({statusBarHidden: true});
+  //     this.props.navigator.push({
+  //       component: StanzaSwiperView,
+  //       index: index,
+  //       photos: this.state.stanzaIds,
+  //       // uri: uri,
+  //       // width: this.state.currentScreenWidth,
+  //       showStatusBar: this.showStatusBar.bind(this),
+  //       userId: this.state.userId,
+  //       sceneConfig: {
+  //         ...Navigator.SceneConfigs.FloatFromBottom,
+  //         gestures: {
+  //           pop: {
+  //             ...Navigator.SceneConfigs.FloatFromBottom.gestures.pop,
+  //             edgeHitWidth: Dimensions.get('window').height,
+  //           },
+  //         },
+  //       }
+  //     });
+  //   }
+  // }
+
   showStatusBar() {
     this.setState({statusBarHidden: false});
   }
 
   renderRow(images) {
     return images.map((uri, index) => {
+      return (
+        // Hardcoded key value for each element below to dismiss eror message
+        <TouchableHighlight onPress={this.showImageFullscreen(uri, index)}>
+          <Image style={[styles.image, this.calculatedSize()]} source={{uri: uri}} />
+        </TouchableHighlight>
+      )
+    })
+  }
+
+  renderStanzaRow(stanzas) {
+    return stanzas.map((id, index) => {
       return (
         // Hardcoded key value for each element below to dismiss eror message
         <TouchableHighlight onPress={this.showImageFullscreen(uri, index)}>
