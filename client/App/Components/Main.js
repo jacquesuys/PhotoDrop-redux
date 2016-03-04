@@ -5,7 +5,7 @@ var Settings = require('./Settings');
 var Camera = require('./Camera');
 var MapView = require('./MapView');
 var AuthorView = require('./AuthorView');
-var AudioView = require('./AudioView');
+var Recorder = require('./Recorder');
 
 var {
   StyleSheet,
@@ -72,7 +72,21 @@ class SwiperView extends React.Component{
         showsPagination={false} 
         index={this.state.index} 
         onMomentumScrollEnd ={this._onMomentumScrollEnd.bind(this)}>
-        <AudioView navigator={this.props.navigator} 
+        <Camera navigator={this.props.navigator} 
+          latitude={this.state.latitude} 
+          longitude={this.state.longitude} 
+          params={this.state} 
+          userId={this.props.route.userId} 
+          _goToSettings={this._goToSettings.bind(this)} 
+          _goToMap={this._goToMap.bind(this)}/>
+        <MapView navigator={this.props.navigator} params={this.state} showsButtons={false} userId={this.props.route.userId}/>
+        <AuthorView navigator={this.props.navigator} 
+          latitude={this.state.latitude} 
+          longitude={this.state.longitude} 
+          params={this.state} 
+          showsButtons={false} 
+          userId={this.props.route.userId}/>
+        <Recorder navigator={this.props.navigator} 
           latitude={this.state.latitude} 
           longitude={this.state.longitude} 
           params={this.state} 
