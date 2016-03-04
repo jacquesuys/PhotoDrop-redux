@@ -192,7 +192,7 @@ class PhotosView extends React.Component{
   }
 
   _backButton() {
-    this.props.navigator.pop();
+    this.props.navigator.pop(); 
   }
 
   _onChange(event) {
