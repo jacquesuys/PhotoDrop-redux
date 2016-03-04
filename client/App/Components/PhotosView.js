@@ -193,7 +193,7 @@ class PhotosView extends React.Component{
   }
 
   _backButton() {
-    this.props.navigator.pop(); 
+    this.props.navigator.pop();
   }
 
   _onChange(event) {
@@ -279,28 +279,28 @@ class PhotosView extends React.Component{
     if(this.state.favorites) {
       return (
         <View style={{flex: 1, backgroundColor: '#ededed' }}>
-          <NavigationBar 
-            title={pageTitle} 
-            tintColor={"white"} 
+          <NavigationBar
+            title={pageTitle}
+            tintColor={"white"}
             statusBar={{hidden: this.state.statusBarHidden}}
             leftButton={backButton}/>
-          <SegmentedControlIOS 
-            values={['Uploaded By You', 'Favorited']} 
-            selectedIndex={this.state.selectedIndex} 
-            style={styles.segments} 
+          <SegmentedControlIOS
+            values={['Uploaded By You', 'Favorited']}
+            selectedIndex={this.state.selectedIndex}
+            style={styles.segments}
             tintColor="#FF5A5F"
             onChange={this._onChange.bind(this)}/>
           {this.state.imageUrls ? null : <ActivityIndicatorIOS size={'large'} style={[styles.centering, {height: 550}]} />}
           {this.state.imageUrls && this.state.selectedIndex===0 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText}>{`Looks like you haven't taken any photos...`}</Text>   : null}
           {this.state.imageUrls && this.state.selectedIndex===0 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText2}>Swipe to the camera and drop a photo!</Text>  : null}
-          
+
           {this.state.imageUrls && this.state.selectedIndex===1 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText}>Looks like you have no favorite photos...</Text>   : null}
           {this.state.imageUrls && this.state.selectedIndex===1 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText2}>Swipe to the map and checkout photos around you!</Text>  : null}
-          
-          
 
-          <ScrollView 
-            onLayout={this.handleRotation.bind(this)} 
+
+
+          <ScrollView
+            onLayout={this.handleRotation.bind(this)}
             contentContainerStyle={styles.scrollView}
             refreshControl={
               <RefreshControl
@@ -313,35 +313,37 @@ class PhotosView extends React.Component{
             {this.state.stanzas ? this.renderStanzaRow(this.state.stanzas) : null}
           </ScrollView>
         </View>
-      ); 
+      );
     } else {
       return (
         <View style={{flex: 1, backgroundColor: '#ededed' }}>
-          <NavigationBar 
-            title={pageTitle} 
-            tintColor={"white"} 
+          <NavigationBar
+            title={pageTitle}
+            tintColor={"white"}
             statusBar={{hidden: this.state.statusBarHidden}}
             leftButton={backButton}/>
-          {this.state.imageUrls ? null : <ActivityIndicatorIOS size={'large'} style={[styles.centering, {height: 550}]} />}
-          {this.state.imageUrls && !this.state.imageUrls.length  ? <Text style={styles.noPhotosText}>Looks like there are no photos near you...</Text>   : null}
-          {this.state.imageUrls && !this.state.imageUrls.length  ? <Text style={styles.noPhotosText2}>Be the first one to drop a photo!</Text>  : null}
-          
-          
-          <ScrollView 
-            onLayout={this.handleRotation.bind(this)} 
-            contentContainerStyle={styles.scrollView}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.isRefreshing}
-                onRefresh={this._onRefresh.bind(this)}
-                title="Refreshing..."
-              />
-            }>
-            {this.state.imageUrls ? this.renderRow(this.state.imageUrls) : null}
-            {this.state.stanzas ? this.renderStanzaRow(this.state.stanzas) : null}
-          </ScrollView>
+
+
+
+            <View>
+              <Text>Photos</Text>
+              {this.state.imageUrls ? null : <ActivityIndicatorIOS size={'large'} style={[styles.centering, {height: 550}]} />}
+              {this.state.imageUrls && !this.state.imageUrls.length  ? <Text style={styles.noPhotosText}>Looks like there are no photos near you...</Text>   : null}
+              {this.state.imageUrls && !this.state.imageUrls.length  ? <Text style={styles.noPhotosText2}>Be the first one to drop a photo!</Text>  : null}
+              <ScrollView style={styles.rowContainer} horizontal={true}>
+                {this.state.imageUrls ? this.renderRow(this.state.imageUrls) : null}
+              </ScrollView>
+            </View>
+
+            <View>
+              <Text>Stanzas</Text>
+              <ScrollView style={styles.rowContainer} horizontal={true}>
+                {this.state.stanzas ? this.renderStanzaRow(this.state.stanzas) : null}
+              </ScrollView>
+            </View>
+
         </View>
-      ); 
+      );
     }
   }
 }
@@ -390,6 +392,9 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: '#565b5c'
   },
+  rowContainer: {
+
+  }
 });
 
 module.exports = PhotosView;
