@@ -49,13 +49,13 @@ module.exports = {
             username: username,
             password: password
           }).then(function(user) {
-            console.log('Created user', user)
+            console.log('Created user', user);
               // Generate JWT for user here
               // params: payload, secret key, encryption, callback
             var token = jwt.sign({ username: user.username, userId: user._id }, 'FRANKJOEVANMAX');
-            console.log('token created', token)
-            res.json({ token: token, userId: user._id, username: user.username })
-            next()
+            console.log('token created', token);
+            res.json({ token: token, userId: user._id, username: user.username });
+            next();
           }).catch(function(err) {
             console.error('problem creating user', err);
           });
@@ -67,10 +67,11 @@ module.exports = {
   },
 
   checkJWT: function(req, res, next) {
-    console.log('imcomming GET for JWT', req.params.JWT)
+    console.log('imcomming GET for JWT', req.params.JWT);
     var decoded = jwt.verify(req.params.JWT, 'FRANKJOEVANMAX', function(err, decoded) {
-      if (err) console.log('problem decoding', err);
-      else {
+      if (err) {
+        console.log('problem decoding', err);
+      } else {
         // send back decoded.userId and decoded.username
         res.json({ username: decoded.username, userId: decoded.userId });
         next();
@@ -94,9 +95,11 @@ module.exports = {
             .then(function(foundUser) {
               user.password = newPassword;
               user.save(function(err, savedUser) {
-                if (err) next(err);
+                if (err) {
+                  next(err);
+                }
                 res.json();
-              })
+              });
             }).catch(function(err) {
               console.error('problem changing user info', err);
             });
@@ -119,9 +122,11 @@ module.exports = {
         } else {
           user.username = newUsername;
           user.save(function(err, savedUser) {
-            if (err) next(err);
+            if (err) {
+              next(err);
+            }
             res.json({ username: savedUser.username });
-          })
+          });
         }
       })
       .fail(function(error) {
@@ -132,7 +137,9 @@ module.exports = {
   toggleFavorite: function(req, res, next) {
     var url = req.query.url;
     User.findOne({ _id: mongoose.mongo.ObjectID(req.query.userId) }, function(err, user) {
-      if (err) next(err);
+      if (err) {
+        next(err);
+      }
       if (!user) {
         console.error('User was not found TOGGLEFAV');
       } else {
@@ -151,15 +158,21 @@ module.exports = {
   getPhotoData: function(req, res, next) {
     var currentUserId = req.query.userId;
     Photo.findOne({ url: req.query.url }, function(err, photo) {
-      if (err) console.log(err)
+      if (err) {
+        console.log(err);
+      }
       if (photo) {
         User.findOne({ _id: mongoose.mongo.ObjectID(photo.userId) }, function(err, user) {
-          if (err) next(err);
+          if (err) {
+            next(err);
+          }
           if (!user) {
             console.error('User was not found');
           } else {
             User.findOne({ _id: mongoose.mongo.ObjectID(currentUserId) }, function(err, user) {
-              if (err) next(err);
+              if (err) {
+                next(err);
+              }
               if (!user) {
                 console.error('User was not found 2');
               } else {
@@ -194,7 +207,7 @@ module.exports = {
               if (!user) {
                 console.error('User was not found --- getStanzaData 2');
               } else {
-                var favorited = (user.favorites.indexOf(req.query.id) === -1);
+                var favorited = (user.stanzaFavorites.indexOf(req.query.id) === -1);
                 res.json({ username: user.username, views: stanza.views, favorited: !favorited });
               }
             });
@@ -213,6 +226,28 @@ module.exports = {
         console.error('User was not found');
       } else {
         res.json(user.favorites);
+      }
+    });
+  },
+
+  toggleStanzaFavorite: function(req, res, next) {
+    var id = req.query.id;
+    User.findOne({ _id: mongoose.mongo.ObjectID(req.query.userId) }, function(err, user) {
+      if (err) {
+        next(err);
+      }
+
+      if (!user) {
+        console.error('User was not found TOGGLE STANZSA FAV');
+      } else {
+        if (user.stanzaFavorites.indexOf(id) === -1) {
+          user.stanzaFavorites.push(id);
+        } else {
+          user.stanzaFavorites.splice(user.stanzaFavorites.indexOf(id), 1);
+        }
+        user.save(function(err, savedUser) {
+          res.json();
+        });
       }
     });
   }

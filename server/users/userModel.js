@@ -19,6 +19,10 @@ var UserSchema = new mongoose.Schema({
     type: Array,
     default: []
   },
+  stanzaFavorites: {
+    type: Array,
+    default: []
+  },
   salt: String
 });
 
