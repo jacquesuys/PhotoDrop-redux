@@ -40,6 +40,9 @@ class PhotosView extends React.Component{
       userPhotosUrls: undefined,
       userFavoritesUrls: undefined,
       allViewablePhotos: undefined,
+      stanzaIds: undefined,
+      userStanzaIds: undefined,
+      userFavoriteStanzaIds: undefined,
       isRefreshing: false,
     };
     if(this.state.favorites) {
@@ -54,6 +57,18 @@ class PhotosView extends React.Component{
         });
         this.setState({ imageUrls: photosUrls });
         this.setState({ userPhotosUrls: photosUrls });
+      })
+      api.fetchUserFavoriteStanzas(this.state.userId, (stanzas) => {
+        var stanzasArr = JSON.parse(stanzas);
+        this.setState({ userFavoriteStanzaIds: stanzasArr });
+      })
+      api.fetchUserStanzas(this.state.userId, (stanzas) => {
+        var stanzasArr = JSON.parse(stanzas);
+        var stanzaIds = stanzasArr.map((stanza) => {
+          return stanza.id;
+        });
+        this.setState({ stanzaIds: stanzaIds });
+        this.setState({ userStanzaIds: stanzaIds });
       })
     } else {
       navigator.geolocation.getCurrentPosition(
@@ -70,6 +85,13 @@ class PhotosView extends React.Component{
           return photo.url;
         });
         this.setState({ imageUrls: photosUrls });
+      })
+      api.fetchStanzas(this.state.latitude, this.state.longitude, 50, (stanzas) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+        var stanzasArr = JSON.parse(stanzas);
+        var stanzaIds = stanzasArr.map((stanza) => {
+          return stanza.id;
+        });
+        this.setState({ stanzaIds: stanzaIds });
       })
     }
   }

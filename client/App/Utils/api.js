@@ -257,6 +257,21 @@ var api = {
     });
   },
 
+  fetchUserFavoriteStanzas(userId, callback) {
+    var url = 'http://localhost:8000/fetchUserFavoriteStanzas?userId=' + userId;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(stanzas) {
+      callback(stanzas._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
+
 
   incrementStanzaViews(id, callback) {
     var url = 'http://localhost:8000/incrementStanzaViews?id=' + id;

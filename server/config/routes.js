@@ -35,6 +35,7 @@ module.exports = function(app, express) {
   app.get('/fetchStanzas/', stanzaController.fetchStanzas);
   app.get('/fetchStanzaLocations/', stanzaController.fetchStanzaLocations);
   app.get('/fetchUserStanzas/', stanzaController.fetchUserStanzas);
+  app.get('/fetchUserFavoriteStanzas/', userController.fetchFavoriteStanzas);
 
   // Deal with audio
   app.post('/saveAudio', upload.any(), audioController.saveAudioToDb);
