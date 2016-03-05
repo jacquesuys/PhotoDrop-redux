@@ -20,7 +20,7 @@ module.exports = {
     });
   },
 
-  // fetch all photos from DB
+  // fetch all stanzas from DB
   fetchStanzas: function(req, res, next) {
     var maxDistance = Number(req.query.radius);
     var coords = [req.query.lon, req.query.lat];

@@ -1,8 +1,6 @@
 var RNUploader = require('NativeModules').RNUploader;
 var RNFS = require('react-native-fs');
 
-
-
 var api = {
   login(username, password) {
     var user = { username: username, password: password };
@@ -118,7 +116,6 @@ var api = {
       console.log(err);
     });
   },
-
 
   fetchUserPhotos(userId, callback) {
     var url = 'http://localhost:8000/fetchUserPhotos?userId=' + userId;
@@ -341,7 +338,52 @@ var api = {
 
         console.log('upload complete with status: ', status, responseString);
       });
+  },
+
+  incrementAudioViews(id, callback) {
+    var url = 'http://localhost:8000/incrementAudioViews?id=' + id;
+    console.log(" CALLING tHE INCREMENT WITH AN ID ---- ", id);
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(result) {
+      callback(result._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
+  fetchAudios(latitude, longitude, radius, callback) {
+    var url = 'http://localhost:8000/fetchAudios?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(audios) {
+      callback(audios._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
+  fetchAudiosLocations(latitude, longitude, latdelta, londelta, callback) {
+    var url = 'http://localhost:8000/fetchAudiosLocations?lat=' + latitude + '&lon=' + longitude + '&latdelta=' + latdelta + '&londelta=' + londelta;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(stanzas) {
+      callback(stanzas._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
   }
+
 };
 
 module.exports = api;
