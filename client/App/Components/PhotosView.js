@@ -182,7 +182,6 @@ class PhotosView extends React.Component{
   }
 
   renderStanzaRow(stanzas) {
-    console.log('OMG I+H AM the stanzas !', stanzas);
     return stanzas.map((stanza, index) => {
       return (
         // Hardcoded key value for each element below to dismiss eror message
