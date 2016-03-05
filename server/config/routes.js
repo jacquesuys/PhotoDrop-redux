@@ -38,7 +38,10 @@ module.exports = function(app, express) {
 
   // Deal with audio
   app.post('/saveAudio', upload.any(), audioController.saveAudioToDb);
-  app.get('/incrementAudioViews/', audioController.incrementViews);
+  app.get('/fetchAudios/', audioController.fetchAudios);
+  app.get('/fetchAudiosLocations/', audioController.fetchAudiosLocations)
+  app.get('/fetchUserAudios/', audioController.fetchUserAudios);
+
 
   // Increment views count on photo and add to Favorites
   app.get('/incrementViews/', photoController.incrementViews);
@@ -49,6 +52,12 @@ module.exports = function(app, express) {
   app.get('/incrementStanzaViews/', stanzaController.incrementViews);
   app.get('/toggleStanzaFavorite', userController.toggleStanzaFavorite);
   app.get('/getStanzaData/', userController.getStanzaData);
+
+  // Increment view count on Audios
+  app.get('/incrementAudioViews/', audioController.incrementViews);
+  // working here.......
+  // app.get('/toggleAudiosFavorite', userController.toggleAudiosFavorite);
+  // app.get('/getAudiosData/', userController.getAudiosData);
 
   // Sign in and sign up routes
   app.post('/login', userController.login);

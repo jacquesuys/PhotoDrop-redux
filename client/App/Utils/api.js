@@ -355,12 +355,35 @@ var api = {
       console.log(err);
     });
   },
-  fetchAudios() {
-
+  fetchAudios(latitude, longitude, radius, callback) {
+    var url = 'http://localhost:8000/fetchAudios?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(audios) {
+      callback(audios._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
   },
-  fetchAudioLocation() {
-    
+  fetchAudiosLocations(latitude, longitude, latdelta, londelta, callback) {
+    var url = 'http://localhost:8000/fetchAudiosLocations?lat=' + latitude + '&lon=' + longitude + '&latdelta=' + latdelta + '&londelta=' + londelta;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(stanzas) {
+      callback(stanzas._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
   }
+
 };
 
 module.exports = api;

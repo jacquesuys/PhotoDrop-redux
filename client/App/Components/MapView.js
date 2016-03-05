@@ -39,38 +39,59 @@ class Map extends React.Component {
       closeLocations: undefined,
       stanzasLocations: undefined,
       closeStanzaLocations: undefined,
+
       audiosLocations: undefined,
       closeAudiosLocations: undefined
     };
     
-    api.fetchPhotos(this.props.params.latitude, this.props.params.longitude, 50, (photos) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
-      var photosArr = JSON.parse(photos);
-      this.setState({ closeLocations: photosArr });
+    api.fetchPhotos(
+      this.props.params.latitude,
+      this.props.params.longitude, 50, (photos) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+        var photosArr = JSON.parse(photos);
+        this.setState({ closeLocations: photosArr });
     });
 
-    api.fetchLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (photos) => {
-      var photosArr = JSON.parse(photos);
-      this.setState({ photosLocations: photosArr });
+    api.fetchLocations(
+      this.state.latitude,
+      this.state.longitude,
+      this.state.latitudeDelta,
+      this.state.longitudeDelta, (photos) => {
+        var photosArr = JSON.parse(photos);
+        this.setState({ photosLocations: photosArr });
     });
 
-    api.fetchStanzas(this.props.params.latitude, this.props.params.longitude, 50, (stanzas) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
-      var stanzasArr = JSON.parse(stanzas);
-      this.setState({ closeStanzaLocations: stanzasArr });
+    api.fetchStanzas(
+      this.props.params.latitude,
+      this.props.params.longitude, 50, (stanzas) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+        var stanzasArr = JSON.parse(stanzas);
+        this.setState({ closeStanzaLocations: stanzasArr });
     });
 
-    api.fetchStanzaLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (stanzas) => {
-      var stanzasArr = JSON.parse(stanzas);
-      this.setState({ stanzasLocations: stanzasArr });
+    api.fetchStanzaLocations(
+      this.state.latitude,
+      this.state.longitude,
+      this.state.latitudeDelta,
+      this.state.longitudeDelta, (stanzas) => {
+        var stanzasArr = JSON.parse(stanzas);
+        this.setState({ stanzasLocations: stanzasArr });
     });
 
-    api.fetchAudios(this.props.params.latitude, this.props.params.longitude, 50, (audios) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
-      var audiosArr = JSON.parse(audios);
-      this.setState({ closeAudiosLocations: audiosArr });
+
+    api.fetchAudios(
+      this.props.params.latitude,
+      this.props.params.longitude,
+      50, (audios) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+        var audiosArr = JSON.parse(audios);
+        this.setState({ closeAudiosLocations: audiosArr });
     });
 
-    api.fetchAudioLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (audios) => {
-      var audiosArr = JSON.parse(audios);
-      this.setState({ audiosLocations: audiosArr });
+    api.fetchAudiosLocations(
+      this.state.latitude,
+      this.state.longitude,
+      this.state.latitudeDelta,
+      this.state.longitudeDelta, (audios) => {
+        var audiosArr = JSON.parse(audios);
+        this.setState({ audiosLocations: audiosArr });
     });
   }
 
@@ -78,32 +99,52 @@ class Map extends React.Component {
       setInterval(()=> {
         if(this.props.params.index===2) {
           this.onLocationPressed();
-          api.fetchLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (photos) => {
-            var photosArr = JSON.parse(photos);
-            this.setState({ photosLocations: photosArr });
+          api.fetchLocations(
+            this.state.latitude,
+            this.state.longitude,
+            this.state.latitudeDelta, this.state.longitudeDelta, (photos) => {
+              var photosArr = JSON.parse(photos);
+              this.setState({ photosLocations: photosArr });
           });
-          api.fetchPhotos(this.state.latitude, this.state.longitude, 50, (photos) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
-            var photosArr = JSON.parse(photos);
-            this.setState({ closeLocations: photosArr });
+          api.fetchPhotos(
+            this.state.latitude,
+            this.state.longitude,
+            50, (photos) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+              var photosArr = JSON.parse(photos);
+              this.setState({ closeLocations: photosArr });
           });
-          api.fetchStanzas(this.props.params.latitude, this.props.params.longitude, 50, (stanzas) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
-            var stanzasArr = JSON.parse(stanzas);
-            this.setState({ closeStanzaLocations: stanzasArr });
+          api.fetchStanzas(
+            this.props.params.
+            atitude,
+            this.props.params.longitude, 50, (stanzas) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+              var stanzasArr = JSON.parse(stanzas);
+              this.setState({ closeStanzaLocations: stanzasArr });
           });
-          api.fetchStanzaLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (stanzas) => {
-            var stanzasArr = JSON.parse(stanzas);
-            this.setState({ stanzasLocations: stanzasArr });
+          api.fetchStanzaLocations(
+            this.state.latitude,
+            this.state.longitude,
+            this.state.latitudeDelta,
+            this.state.longitudeDelta, (stanzas) => {
+              var stanzasArr = JSON.parse(stanzas);
+              this.setState({ stanzasLocations: stanzasArr });
           });
-          api.fetchAudios(this.state.latitude, this.state.longitude, 50, (audios) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
-            var audiosArr = JSON.parse(audios);
-            this.setState({ closeAudiosLocations: audiosArr });
+          api.fetchAudios(
+            this.state.latitude,
+            this.state.longitude,
+            50, (audios) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+              var audiosArr = JSON.parse(audios);
+              this.setState({ closeAudiosLocations: audiosArr });
           });
-          api.fetchAudioLocations(this.state.latitude, this.state.longitude, this.state.latitudeDelta, this.state.longitudeDelta, (audios) => {
-            var audiosArr = JSON.parse(audios);
-            this.setState({ audiosLocations: audiosArr });
+          api.fetchAudiosLocations(
+            this.state.latitude,
+            this.state.longitude,
+            this.state.latitudeDelta,
+            this.state.longitudeDelta, (audios) => {
+              var audiosArr = JSON.parse(audios);
+              this.setState({ audiosLocations: audiosArr });
           });
         }
-      }, 2000)
+      }, 1000)
   }
 
   showImage(uri) {
@@ -257,7 +298,7 @@ class Map extends React.Component {
             )
           }
 
-          { this.state.audioLocations.map((audioLocation) => {
+          { this.state.audiosLocations.map((audioLocation) => {
               return (
               <MapView.Marker coordinate={{latitude: audioLocation.loc.coordinates[1], longitude: audioLocation.loc.coordinates[0]}}>
                 <BlackAudioMarker navigator={this.props.navigator}/>
@@ -265,7 +306,7 @@ class Map extends React.Component {
              )}
             )
           }
-          { this.state.closeAudioLocations.map((audioLocation) => {
+          { this.state.closeAudiosLocations.map((audioLocation) => {
               return (
                <MapView.Marker coordinate={{latitude: audioLocation.loc.coordinates[1], longitude: audioLocation.loc.coordinates[0]}} onPress={this.showAudio(audioLocation._id, audioLocation.text)}>
                  <RedAudioMarker navigator={this.props.navigator}/>
