@@ -182,6 +182,7 @@ class PhotosView extends React.Component{
   }
 
   renderStanzaRow(stanzas) {
+    console.log('OMG I+H AM the stanzas !', stanzas);
     return stanzas.map((stanza, index) => {
       return (
         // Hardcoded key value for each element below to dismiss eror message
@@ -290,28 +291,34 @@ class PhotosView extends React.Component{
             style={styles.segments}
             tintColor="#FF5A5F"
             onChange={this._onChange.bind(this)}/>
-          {this.state.imageUrls ? null : <ActivityIndicatorIOS size={'large'} style={[styles.centering, {height: 550}]} />}
-          {this.state.imageUrls && this.state.selectedIndex===0 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText}>{`Looks like you haven't taken any photos...`}</Text>   : null}
-          {this.state.imageUrls && this.state.selectedIndex===0 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText2}>Swipe to the camera and drop a photo!</Text>  : null}
 
-          {this.state.imageUrls && this.state.selectedIndex===1 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText}>Looks like you have no favorite photos...</Text>   : null}
-          {this.state.imageUrls && this.state.selectedIndex===1 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText2}>Swipe to the map and checkout photos around you!</Text>  : null}
-
-
-
-          <ScrollView
-            onLayout={this.handleRotation.bind(this)}
-            contentContainerStyle={styles.scrollView}
-            refreshControl={
-              <RefreshControl
+          <ScrollView refreshControl={
+            <RefreshControl
                 refreshing={this.state.isRefreshing}
                 onRefresh={this._onRefresh.bind(this)}
                 title="Refreshing..."
-              />
-            }>
-            {this.state.imageUrls ? this.renderRow(this.state.imageUrls) : null}
-            {this.state.stanzas ? this.renderStanzaRow(this.state.stanzas) : null}
+             />
+           }>
+            <View>
+              <Text>Photos</Text>
+              {this.state.imageUrls ? null : <ActivityIndicatorIOS size={'large'} style={[styles.centering, {height: 550}]} />}
+              {this.state.imageUrls && this.state.selectedIndex===0 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText}>{`Looks like you haven't taken any photos...`}</Text>   : null}
+              {this.state.imageUrls && this.state.selectedIndex===0 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText2}>Swipe to the camera and drop a photo!</Text>  : null}
+              {this.state.imageUrls && this.state.selectedIndex===1 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText}>Looks like you have no favorite photos...</Text>   : null}
+              {this.state.imageUrls && this.state.selectedIndex===1 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText2}>Swipe to the map and checkout photos around you!</Text>  : null}
+              <ScrollView style={styles.rowContainer} horizontal={true}>
+                {this.state.imageUrls ? this.renderRow(this.state.imageUrls) : null}
+              </ScrollView>
+            </View>
+
+            <View>
+              <Text>Stanzas</Text>
+              <ScrollView style={styles.rowContainer} horizontal={true}>
+                {this.state.stanzas ? this.renderStanzaRow(this.state.stanzas) : null}
+              </ScrollView>
+            </View>
           </ScrollView>
+
         </View>
       );
     } else {
