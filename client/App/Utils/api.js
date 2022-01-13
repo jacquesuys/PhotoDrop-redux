@@ -304,6 +304,21 @@ var api = {
     });
   },
 
+  getAudioData(id, userId, callback) {
+    var url = 'http://localhost:8000/getAudioData?id=' + id + '&userId=' + userId;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(data) {
+      callback(data._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
+
   toggleStanzaFavorite(userId, id, callback) {
     var url = 'http://localhost:8000/toggleStanzaFavorite?userId=' + userId + '&id=' + id;
     return fetch(url, {
@@ -397,8 +412,49 @@ var api = {
     .catch(function(err) {
       console.log(err);
     });
-  }
-
+  },
+  fetchUserAudios(userId, callback) {
+    var url = 'http://localhost:8000/fetchUserAudios?userId=' + userId;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(audios) {
+      callback(audios._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
+  fetchUserFavoriteAudios(userId, callback) {
+    var url = 'http://localhost:8000/fetchUserFavoriteAudios?userId=' + userId;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(audios) {
+      callback(audios._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
+  toggleAudioFavorite(userId, id, callback) {
+    var url = 'http://localhost:8000/toggleAudioFavorite?userId=' + userId + '&id=' + id;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(function(result) {
+      callback(result._bodyInit);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  },
 };
 
 module.exports = api;

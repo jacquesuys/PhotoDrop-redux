@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 module.exports = {
 
   saveAudioToDb: function(req, res) {
-    console.log('Save audio to db: ------------', typeof parseFloat(req.body.longitude), req.body.latitude);
+    // console.log('Save audio to db: ------------', typeof parseFloat(req.body.longitude), req.body.latitude);
 
     var thisFile = req.files[0];
 
@@ -16,10 +16,10 @@ module.exports = {
       },
       userId: mongoose.mongo.ObjectID(req.body.user_id)
     }).save().then(function(data){
-      console.log('Confirms mongod data saving');
+      // console.log('Confirms mongod data saving');
       res.json();
     }).catch(function(err) {
-      console.log('could not save to db', err.message);
+      // console.log('could not save to db', err.message);
     });
   },
 
@@ -28,9 +28,9 @@ module.exports = {
       if (err) {
         next(err);
       }
-      console.log( " HI IM IN THE BAKC END AND THE ID IS!!!!!! --- ", req.query.id);
+      // console.log( " HI IM IN THE BAKC END AND THE ID IS!!!!!! --- ", req.query.id);
       if (!audio) {
-        return next(new Error('Text not added yet'));
+        // return next(new Error('Text not added yet'));
       }
       audio.views++;
       audio.save(function(err, savedAudio) {
@@ -44,7 +44,7 @@ module.exports = {
 
   // fetch all audios from DB
   fetchAudios: function(req, res, next) {
-    console.log('Fetch audios!------------Server side controller--------')
+    // console.log('Fetch audios!------------Server side controller--------')
     var maxDistance = Number(req.query.radius);
     var coords = [req.query.lon, req.query.lat];
 

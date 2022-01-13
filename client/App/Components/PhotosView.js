@@ -5,6 +5,8 @@ var api = require('../Utils/api');
 var IconIon = require('react-native-vector-icons/Ionicons');
 var PhotoSwiperView = require('./PhotoSwiperView');
 var StanzaSwiperView = require('./StanzaSwiperView');
+var {AudioRecorder, AudioPlayer} = require('react-native-audio');
+
 
 var {
   Navigator,
@@ -45,6 +47,10 @@ class PhotosView extends React.Component{
       userStanzas: undefined,
       userFavoriteStanzas: undefined,
       allViewableStanzas: undefined,
+      audios: undefined,
+      userAudios: undefined,
+      userFavoriteAudios: undefined,
+      AllViewableAudios: undefined,
       isRefreshing: false,
     };
     if(this.state.favorites) {
@@ -69,6 +75,15 @@ class PhotosView extends React.Component{
         this.setState({ stanzas: stanzasArr });
         this.setState({ userStanzas: stanzasArr });
       })
+      api.fetchUserFavoriteAudios(this.state.userId, (audios) => {
+        var audiosArr = JSON.parse(audios);
+        this.setState({ userFavoriteAudios: audiosArr });
+      })
+      api.fetchUserAudios(this.state.userId, (audios) => {
+        var audiosArr = JSON.parse(audios);
+        this.setState({ audios: audiosArr });
+        this.setState({ userAudios: audiosArr });
+      })
     } else {
       navigator.geolocation.getCurrentPosition(
         location => {
@@ -89,6 +104,10 @@ class PhotosView extends React.Component{
         var stanzasArr = JSON.parse(stanzas);
         this.setState({ stanzas: stanzasArr });
       })
+      api.fetchAudios(this.state.latitude, this.state.longitude, 50, (audios) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+        var audiosArr = JSON.parse(audios);
+        this.setState({ audios: audiosArr });
+      })
     }
   }
 
@@ -96,9 +115,11 @@ class PhotosView extends React.Component{
     if(this.state.favorites){
       this.setState({ imageUrls: this.state.userPhotosUrls});
       this.setState({ stanzas: this.state.userStanzas});
+      this.setState({ audios: this.state.userAudios});
     } else {
       this.setState({ imageUrls: this.state.allViewablePhotos});
       this.setState({ stanzas: this.state.allViewableStanzas});
+      this.setState({ audios: this.state.allViewableAudios});
     }
   }
 
@@ -166,6 +187,30 @@ class PhotosView extends React.Component{
     }
   }
 
+  showAudioFullscreen(audio, index) {
+    // return () => {
+    //   this.setState({statusBarHidden: true});
+    //   this.props.navigator.push({
+    //     component: AudioSwiperView,
+    //     index: index,
+    //     audios: this.state.audios,
+    //     // uri: uri,
+    //     // width: this.state.currentScreenWidth,
+    //     showStatusBar: this.showStatusBar.bind(this),
+    //     userId: this.state.userId,
+    //     sceneConfig: {
+    //       ...Navigator.SceneConfigs.FloatFromBottom,
+    //       gestures: {
+    //         pop: {
+    //           ...Navigator.SceneConfigs.FloatFromBottom.gestures.pop,
+    //           edgeHitWidth: Dimensions.get('window').height,
+    //         },
+    //       },
+    //     }
+    //   });
+    // }
+  }
+
   showStatusBar() {
     this.setState({statusBarHidden: false});
   }
@@ -183,10 +228,28 @@ class PhotosView extends React.Component{
 
   renderStanzaRow(stanzas) {
     return stanzas.map((stanza, index) => {
+        console.log('TRYNA RENDER A STANZA ROW!');
       return (
         // Hardcoded key value for each element below to dismiss eror message
         <TouchableHighlight onPress={this.showStanzaFullscreen(stanza, index)}>
-          <Text style={[styles.image, this.calculatedSize()]}>{stanza.text}</Text>
+          <Text style={[styles.stanza, this.calculatedSize()]}>{stanza.text}</Text>
+        </TouchableHighlight>
+      )
+    })
+  }
+
+  _startPlay(filename) {
+    return () => {
+      AudioPlayer.playWithUrl('http://localhost:8000/' + filename);
+    }
+  }
+
+  renderAudioRow(audios) {
+    return audios.map((audio, index) => {
+      return (
+        // Hardcoded key value for each element below to dismiss eror message
+        <TouchableHighlight onPress={this._startPlay(JSON.parse(audio.audio).filename)}>
+          <Text style={[styles.stanza, this.calculatedSize()]}>AudioID: {audio._id}</Text>
         </TouchableHighlight>
       )
     })
@@ -203,9 +266,11 @@ class PhotosView extends React.Component{
     if(event.nativeEvent.selectedSegmentIndex===0) {
         this.setState({ imageUrls: this.state.userPhotosUrls});
         this.setState({ stanzas: this.state.userStanzas});
+        this.setState({ audios: this.state.userAudios});
     } else if(event.nativeEvent.selectedSegmentIndex===1) {
         this.setState({ imageUrls: this.state.userFavoritesUrls});
         this.setState({ stanzas: this.state.userFavoriteStanzas});
+        this.setState({ audios: this.state.userFavoriteAudios});
     }
   }
 
@@ -220,6 +285,10 @@ class PhotosView extends React.Component{
         var stanzaArr = JSON.parse(stanzas);
         this.setState({ userFavoriteStanzas: stanzaArr });
       })
+      api.fetchUserFavoriteAudios(this.state.userId, (audios) => {
+        var audioArr = JSON.parse(audios);
+        this.setState({ userFavoriteAudios: audioArr });
+      })
       api.fetchUserPhotos(this.state.userId, (photos) => {
         var photosArr = JSON.parse(photos);
         var photosUrls = photosArr.map((photo) => {
@@ -231,12 +300,18 @@ class PhotosView extends React.Component{
         var stanzaArr = JSON.parse(stanzas);
         this.setState({ userStanzas: stanzaArr });
       })
+      api.fetchUserAudios(this.state.userId, (audios) => {
+        var audioArr = JSON.parse(audios);
+        this.setState({ userAudios: audioArr });
+      })
       if(this.state.selectedIndex===0) {
         this.setState({imageUrls: this.state.userPhotosUrls});
         this.setState({stanzas: this.state.userStanzas});
+        this.setState({audios: this.state.userAudios});
       } else if(this.state.selectedIndex===1) {
         this.setState({imageUrls: this.state.userFavoritesUrls});
         this.setState({stanzas: this.state.userFavoriteStanzas});
+        this.setState({audios: this.state.userFavoriteAudios});
       }
     } else {
       navigator.geolocation.getCurrentPosition(
@@ -257,6 +332,10 @@ class PhotosView extends React.Component{
       api.fetchStanzas(this.state.latitude, this.state.longitude, 50, (stanzas) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
         var stanzaArr = JSON.parse(stanzas);
         this.setState({ stanzas: stanzaArr });
+      })
+      api.fetchAudios(this.state.latitude, this.state.longitude, 50, (audios) => { // need to pass in the radius (in m) from the MapView; hardcoding as 50m for now
+        var audioArr = JSON.parse(audios);
+        this.setState({ audios: audioArr });
       })
     }
     setTimeout(() => {
@@ -299,23 +378,41 @@ class PhotosView extends React.Component{
              />
            }>
             <View>
-              <Text>Photos</Text>
+              <Text style={styles.mediaTitle}>Photos</Text>
               {this.state.imageUrls ? null : <ActivityIndicatorIOS size={'large'} style={[styles.centering, {height: 550}]} />}
-              {this.state.imageUrls && this.state.selectedIndex===0 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText}>{`Looks like you haven't taken any photos...`}</Text>   : null}
+              {this.state.imageUrls && this.state.selectedIndex===0 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText}>Looks like you haven't taken any photos...</Text>   : null}
               {this.state.imageUrls && this.state.selectedIndex===0 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText2}>Swipe to the camera and drop a photo!</Text>  : null}
               {this.state.imageUrls && this.state.selectedIndex===1 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText}>Looks like you have no favorite photos...</Text>   : null}
-              {this.state.imageUrls && this.state.selectedIndex===1 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText2}>Swipe to the map and checkout photos around you!</Text>  : null}
-              <ScrollView style={styles.rowContainer} horizontal={true}>
+              {this.state.imageUrls && this.state.selectedIndex===1 && !this.state.imageUrls.length ? <Text style={styles.noPhotosText2}>Swipe to the map and checkout media around you!</Text>  : null}
+              <ScrollView horizontal={true}>
                 {this.state.imageUrls ? this.renderRow(this.state.imageUrls) : null}
               </ScrollView>
             </View>
 
             <View>
-              <Text>Stanzas</Text>
-              <ScrollView style={styles.rowContainer} horizontal={true}>
+              <Text style={styles.mediaTitle}>Stanzas</Text>
+              {this.state.stanzas ? null : <ActivityIndicatorIOS size={'large'} style={[styles.centering, {height: 550}]} />}
+              {this.state.stanzas && this.state.selectedIndex===0 && !this.state.stanzas.length ? <Text style={styles.noPhotosText}>Looks like you haven't written any stanzas...</Text>   : null}
+              {this.state.stanzas && this.state.selectedIndex===0 && !this.state.stanzas.length ? <Text style={styles.noPhotosText2}>Swipe to the text input and drop a verse!</Text>  : null}
+              {this.state.stanzas && this.state.selectedIndex===1 && !this.state.stanzas.length ? <Text style={styles.noPhotosText}>Looks like you have no favorite stanzas...</Text>   : null}
+              {this.state.stanzas && this.state.selectedIndex===1 && !this.state.stanzas.length ? <Text style={styles.noPhotosText2}>Swipe to the map and checkout media around you!</Text>  : null}
+              <ScrollView horizontal={true}>
                 {this.state.stanzas ? this.renderStanzaRow(this.state.stanzas) : null}
               </ScrollView>
             </View>
+
+            <View>
+              <Text style={styles.mediaTitle}>Audio</Text>
+              {this.state.audios ? null : <ActivityIndicatorIOS size={'large'} style={[styles.centering, {height: 550}]} />}
+              {this.state.audios && this.state.selectedIndex===0 && !this.state.audios.length ? <Text style={styles.noPhotosText}>Looks like you haven't recorded anything...</Text>   : null}
+              {this.state.audios && this.state.selectedIndex===0 && !this.state.audios.length ? <Text style={styles.noPhotosText2}>Swipe to the mic and record something!</Text>  : null}
+              {this.state.audios && this.state.selectedIndex===1 && !this.state.audios.length ? <Text style={styles.noPhotosText}>Looks like you have no favorite audio clips...</Text>   : null}
+              {this.state.audios && this.state.selectedIndex===1 && !this.state.audios.length ? <Text style={styles.noPhotosText2}>Swipe to the map and checkout media around you!</Text>  : null}
+              <ScrollView horizontal={true}>
+                {this.state.audios ? this.renderAudioRow(this.state.audios) : null}
+              </ScrollView>
+            </View>
+
           </ScrollView>
 
         </View>
@@ -332,19 +429,32 @@ class PhotosView extends React.Component{
 
 
             <View>
-              <Text>Photos</Text>
+              <Text style={styles.mediaTitle}>Photos</Text>
               {this.state.imageUrls ? null : <ActivityIndicatorIOS size={'large'} style={[styles.centering, {height: 550}]} />}
               {this.state.imageUrls && !this.state.imageUrls.length  ? <Text style={styles.noPhotosText}>Looks like there are no photos near you...</Text>   : null}
               {this.state.imageUrls && !this.state.imageUrls.length  ? <Text style={styles.noPhotosText2}>Be the first one to drop a photo!</Text>  : null}
-              <ScrollView style={styles.rowContainer} horizontal={true}>
+              <ScrollView horizontal={true}>
                 {this.state.imageUrls ? this.renderRow(this.state.imageUrls) : null}
               </ScrollView>
             </View>
 
             <View>
-              <Text>Stanzas</Text>
-              <ScrollView style={styles.rowContainer} horizontal={true}>
+              <Text style={styles.mediaTitle}>Stanzas</Text>
+              {this.state.stanzas ? null : <ActivityIndicatorIOS size={'large'} style={[styles.centering, {height: 550}]} />}
+              {this.state.stanzas && this.state.selectedIndex===0 && !this.state.stanzas.length ? <Text style={styles.noPhotosText}>Looks like there are no stanzas near you...</Text>   : null}
+              {this.state.stanzas && this.state.selectedIndex===0 && !this.state.stanzas.length ? <Text style={styles.noPhotosText2}>Be the first one to drop a verse!</Text>  : null}
+              <ScrollView horizontal={true}>
                 {this.state.stanzas ? this.renderStanzaRow(this.state.stanzas) : null}
+              </ScrollView>
+            </View>
+
+            <View>
+              <Text style={styles.mediaTitle}>Audio</Text>
+              {this.state.audios ? null : <ActivityIndicatorIOS size={'large'} style={[styles.centering, {height: 550}]} />}
+              {this.state.audios && this.state.selectedIndex===0 && !this.state.audios.length ? <Text style={styles.noPhotosText}>Looks like there's no audio near you...</Text>   : null}
+              {this.state.audios && this.state.selectedIndex===0 && !this.state.audios.length ? <Text style={styles.noPhotosText2}>Be the first one to record something!</Text>  : null}
+              <ScrollView horizontal={true}>
+                {this.state.audios ? this.renderAudioRow(this.state.audios) : null}
               </ScrollView>
             </View>
 
@@ -398,8 +508,16 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: '#565b5c'
   },
-  rowContainer: {
-
+  stanza: {
+    borderWidth: 1,
+    borderColor: '#fff',
+    backgroundColor: '#c4e1ea',
+    padding: 5,
+  },
+  mediaTitle: {
+    fontSize: 18,
+    fontFamily: 'circular',
+    padding: 10
   }
 });
 

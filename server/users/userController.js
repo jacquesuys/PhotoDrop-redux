@@ -217,6 +217,37 @@ module.exports = {
     });
   },
 
+  getAudiosData: function(req, res, next) {
+    var currentUserId = req.query.userId;
+    Audio.findOne({ _id: mongoose.mongo.ObjectID(req.query.id) }, function(err, audio) {
+      if (err) {
+        console.log(err);
+      }
+      if (audio) {
+        User.findOne({ _id: mongoose.mongo.ObjectID(audio.userId) }, function(err, user) {
+          if (err) {
+            next(err);
+          }
+          if (!user) {
+            console.error('User was not found --- getAudioData');
+          } else {
+            User.findOne({ _id: mongoose.mongo.ObjectID(currentUserId) }, function(err, user) {
+              if (err) {
+                next(err);
+              }
+              if (!user) {
+                console.error('User was not found --- getAudioData 2');
+              } else {
+                var favorited = (user.audioFavorites.indexOf(req.query.id) === -1);
+                res.json({ username: user.username, views: audio.views, favorited: !favorited });
+              }
+            });
+          }
+        });
+      }
+    });
+  },
+
   fetchFavorites: function(req, res, next) {
     User.findOne({ _id: mongoose.mongo.ObjectID(req.query.userId) }, function(err, user) {
       if (err) {
@@ -278,6 +309,62 @@ module.exports = {
           user.favoriteStanzas.push(id);
         } else {
           user.favoriteStanzas.splice(user.favoriteStanzas.indexOf(id), 1);
+        }
+        user.save(function(err, savedUser) {
+          res.json();
+        });
+      }
+    });
+  },
+
+  fetchFavoriteAudios: function(req, res, next) {
+    User.findOne({ _id: mongoose.mongo.ObjectID(req.query.userId) }, function(err, user) {
+      if (err) {
+        next(err);
+      }
+      if (!user) {
+        console.error('User was not found');
+      } else {
+        var counter = 0;
+        var length = user.favoriteAudios.length;
+        var audios = [];
+        var sendResponse = function(audios) {
+          res.json(audios);
+        };
+        if(length === 0) {
+          res.json();
+        }
+        user.favoriteAudios.forEach(function(audioId) {
+          Audio.findOne({_id: mongoose.mongo.ObjectID(audioId)}, function(err, audio) {
+            if(err) {
+              next(err);
+            } else {
+              audios.push(audio);
+              counter++;
+              if(counter === length) {
+                sendResponse(audios);
+              }
+            }
+          });
+        });
+      }
+    });
+  },
+
+  toggleAudioFavorite: function(req, res, next) {
+    var id = req.query.id;
+    User.findOne({ _id: mongoose.mongo.ObjectID(req.query.userId) }, function(err, user) {
+      if (err) {
+        next(err);
+      }
+
+      if (!user) {
+        console.error('User was not found TOGGLE AUDIOPIFOIO FAV');
+      } else {
+        if (user.favoriteAudios.indexOf(id) === -1) {
+          user.favoriteAudios.push(id);
+        } else {
+          user.favoriteAudios.splice(user.favoriteAudios.indexOf(id), 1);
         }
         user.save(function(err, savedUser) {
           res.json();
